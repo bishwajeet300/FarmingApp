@@ -1,0 +1,95 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.FarmingApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/secondaryLightColor</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance">
+        <item name="fontFamily">@font/nunito_semibold</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="FormTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundColor">@color/background</item>
+        <item name="android:textColorHint">@color/secondaryLightColor</item>
+        <item name="hintTextColor">@color/secondaryLightColor</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="hintTextAppearance">@style/TextInputLayoutAppearance</item>
+    </style>
+
+    <style name="TextInputEditTextAppearance">
+        <item name="fontFamily">@font/nunito_semibold</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="FormEditText">
+        <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="ButtonPrimary">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">60dp</item>
+        <item name="android:paddingEnd">60dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="ButtonSecondary">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">60dp</item>
+        <item name="android:paddingEnd">60dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/button_selector_secondary</item>
+    </style>
+
+    <style name="ButtonForm">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/button_selector_form</item>
+    </style>
+</resources>

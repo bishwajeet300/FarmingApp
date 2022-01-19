@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_startup_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.farmingapp.view.landing.LandingFragment"
+        android:label="fragment_landing"
+        tools:layout="@layout/fragment_landing" >
+        <action
+            android:id="@+id/action_landingFragment_to_farmerDetailFragment"
+            app:destination="@id/farmerDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmerDetailFragment"
+        android:name="com.farmingapp.view.farmerdetail.FarmerDetailFragment"
+        android:label="FarmerDetailFragment" >
+        <argument
+            android:name="field_type"
+            app:argType="com.farmingapp.view.landing.FieldDesign"
+            android:defaultValue="PLAIN" />
+        <action
+            android:id="@+id/action_farmerDetailFragment_to_cropSelectionWaterCalculationFragment"
+            app:destination="@id/cropSelectionWaterCalculationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.farmingapp.view.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_landingFragment"
+            app:destination="@id/landingFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/cropSelectionWaterCalculationFragment"
+        android:name="com.farmingapp.view.cropandwater.CropSelectionWaterCalculationFragment"
+        android:label="CropSelectionWaterCalculationFragment" >
+        <action
+            android:id="@+id/action_cropSelectionWaterCalculationFragment_to_terraceDetailsFragment"
+            app:destination="@id/terraceDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_cropSelectionWaterCalculationFragment_to_plainFieldDipperWaterCalculationFragment"
+            app:destination="@id/plainFieldDipperWaterCalculationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/terraceDetailsFragment"
+        android:name="com.farmingapp.view.terracedetails.TerraceDetailsFragment"
+        android:label="TerraceDetailsFragment" >
+        <action
+            android:id="@+id/action_terraceDetailsFragment_to_terraceFieldLateralDetailsFragment"
+            app:destination="@id/terraceFieldLateralDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/terraceFieldLateralDetailsFragment"
+        android:name="com.farmingapp.view.terracefieldlateraldetail.TerraceFieldLateralDetailsFragment"
+        android:label="TerraceFieldLateralDetailsFragment" >
+        <action
+            android:id="@+id/action_terraceFieldLateralDetailsFragment_to_terraceFieldLateralSelectionDesignFragment"
+            app:destination="@id/terraceFieldLateralSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/terraceFieldLateralSelectionDesignFragment"
+        android:name="com.farmingapp.view.terracefieldlateralselectiondesign.TerraceFieldLateralSelectionDesignFragment"
+        android:label="TerraceFieldLateralSelectionDesignFragment" >
+        <action
+            android:id="@+id/action_terraceFieldLateralSelectionDesignFragment_to_terraceFieldSubMainSelectionDesignFragment"
+            app:destination="@id/terraceFieldSubMainSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/terraceFieldSubMainSelectionDesignFragment"
+        android:name="com.farmingapp.view.terracefieldsubmainselectiondesign.TerraceFieldSubMainSelectionDesignFragment"
+        android:label="TerraceFieldSubMainSelectionDesignFragment" >
+        <action
+            android:id="@+id/action_terraceFieldSubMainSelectionDesignFragment_to_mainLineSelectionDesignFragment"
+            app:destination="@id/mainLineSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mainLineSelectionDesignFragment"
+        android:name="com.farmingapp.view.mainlineselectiondesign.MainLineSelectionDesignFragment"
+        android:label="MainLineSelectionDesignFragment" >
+        <action
+            android:id="@+id/action_mainLineSelectionDesignFragment_to_systemWaterSourceDetailsFragment"
+            app:destination="@id/systemWaterSourceDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/systemWaterSourceDetailsFragment"
+        android:name="com.farmingapp.view.systemwaterdetails.SystemWaterSourceDetailsFragment"
+        android:label="SystemWaterSourceDetailsFragment" >
+        <action
+            android:id="@+id/action_systemWaterSourceDetailsFragment_to_outputDetailsFragment"
+            app:destination="@id/outputDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/outputDetailsFragment"
+        android:name="com.farmingapp.view.outputdetail.OutputDetailsFragment"
+        android:label="OutputDetailsFragment" >
+        <action
+            android:id="@+id/action_outputDetailsFragment_to_costDetailsFragment2"
+            app:destination="@id/costDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/costDetailsFragment"
+        android:name="com.farmingapp.view.costdetail.CostDetailsFragment"
+        android:label="CostDetailsFragment" >
+        <action
+            android:id="@+id/action_costDetailsFragment2_to_shareDetailsFragment"
+            app:destination="@id/shareDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/shareDetailsFragment"
+        android:name="com.farmingapp.view.sharedetail.ShareDetailsFragment"
+        android:label="ShareDetailsFragment" >
+        <action
+            android:id="@+id/action_shareDetailsFragment_to_landingFragment"
+            app:destination="@id/landingFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/plainFieldDipperWaterCalculationFragment"
+        android:name="com.farmingapp.view.plainfielddipperselection.PlainFieldDipperWaterCalculationFragment"
+        android:label="PlainFieldDipperWaterCalculationFragment" >
+        <action
+            android:id="@+id/action_plainFieldDipperWaterCalculationFragment_to_plainFieldLateralSelectionDesignFragment"
+            app:destination="@id/plainFieldLateralSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/plainFieldLateralSelectionDesignFragment"
+        android:name="com.farmingapp.view.plainfieldlateralselectiondesign.PlainFieldLateralSelectionDesignFragment"
+        android:label="PlainFieldLateralSelectionDesignFragment" >
+        <action
+            android:id="@+id/action_plainFieldLateralSelectionDesignFragment_to_plainFieldSubMainSelectionDesignFragment"
+            app:destination="@id/plainFieldSubMainSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/plainFieldSubMainSelectionDesignFragment"
+        android:name="com.farmingapp.view.plainfieldsubmainselectiondesign.PlainFieldSubMainSelectionDesignFragment"
+        android:label="PlainFieldSubMainSelectionDesignFragment" >
+        <action
+            android:id="@+id/action_plainFieldSubMainSelectionDesignFragment_to_mainLineSelectionDesignFragment"
+            app:destination="@id/mainLineSelectionDesignFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+</navigation>

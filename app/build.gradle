@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    compileSdk 30
+
+    defaultConfig {
+        applicationId "com.farmingapp"
+        minSdk 27
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    def versionRoomDB = '2.3.0'
+    def versionMoshi = '1.12.0'
+    def versionFragment = '1.3.6'
+
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation "androidx.fragment:fragment-ktx:$versionFragment"
+
+    // DI -> Hilt
+    implementation "com.google.dagger:hilt-android:$versionHilt"
+    kapt "com.google.dagger:hilt-compiler:$versionHilt"
+
+    // Parser -> Moshi
+    implementation "com.squareup.moshi:moshi:$versionMoshi"
+    implementation "com.squareup.moshi:moshi-kotlin:$versionMoshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$versionMoshi"
+
+    // Database -> RoomDB
+    implementation "androidx.room:room-runtime:$versionRoomDB"
+    kapt "androidx.room:room-compiler:$versionRoomDB"
+    implementation "androidx.room:room-ktx:$versionRoomDB" // Kotlin Extensions and Coroutines support for Room DB
+
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:$versionNavigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$versionNavigation"
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
