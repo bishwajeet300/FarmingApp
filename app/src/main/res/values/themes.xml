@@ -43,6 +43,16 @@
         <item name="android:letterSpacing">0.01</item>
     </style>
 
+    <style name="TextLabel">
+        <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
+        <item name="android:textColor">@color/primaryLightColor</item>
+    </style>
+
+    <style name="TextValue">
+        <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="FormEditText">
         <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
         <item name="android:textColor">@color/white</item>

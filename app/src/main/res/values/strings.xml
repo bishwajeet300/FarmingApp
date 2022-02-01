@@ -83,4 +83,7 @@
     <string name="terrace_height_helper_text">*Include height of tank placement</string>
     <string name="total_height_terrace_hint">Totla Terrace Height</string>
     <string name="length_lateral_submain_hint">Length of Lateral on one side of Sub-Main (m)</string>
+    <string name="label">Label</string>
+    <string name="value">Value</string>
+    <string name="divider">:</string>
 </resources>
