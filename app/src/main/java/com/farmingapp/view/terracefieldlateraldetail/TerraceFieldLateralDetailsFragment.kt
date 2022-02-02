@@ -21,6 +21,12 @@ class TerraceFieldLateralDetailsFragment : Fragment() {
         _binding = FragmentTerraceFieldLateralDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+            }
+        }
+
         setupClickListener()
 
         return view
