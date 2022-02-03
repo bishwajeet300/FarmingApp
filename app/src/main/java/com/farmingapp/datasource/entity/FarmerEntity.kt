@@ -9,5 +9,6 @@ data class FarmerEntity(
     val full_name: String = "",
     val address: String = "",
     val phone: String = "",
-    val email: String = ""
+    val email: String = "",
+    val field: String = ""
 )

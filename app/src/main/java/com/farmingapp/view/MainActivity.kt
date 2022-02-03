@@ -1,8 +1,7 @@
 package com.farmingapp.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.farmingapp.R
+import androidx.appcompat.app.AppCompatActivity
 import com.farmingapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

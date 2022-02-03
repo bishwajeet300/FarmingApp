@@ -86,4 +86,6 @@
     <string name="label">Label</string>
     <string name="value">Value</string>
     <string name="divider">:</string>
+    <string name="user_saved">User information is saved</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>
