@@ -88,4 +88,5 @@
     <string name="divider">:</string>
     <string name="user_saved">User information is saved</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="cost_detail_title">Cost Details</string>
 </resources>

@@ -29,6 +29,20 @@ class ShareDetailsFragment : Fragment() {
 
     }
 
+    private fun disableViews() {
+        binding.btnBack.isEnabled = false
+        binding.btnReset.isEnabled = false
+        binding.btnFinish.isEnabled = false
+        
+    }
+
+    private fun enableViews() {
+        binding.btnBack.isEnabled = true
+        binding.btnReset.isEnabled = true
+        binding.btnFinish.isEnabled = true
+    
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

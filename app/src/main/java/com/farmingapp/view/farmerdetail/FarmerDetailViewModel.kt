@@ -41,8 +41,7 @@ class FarmerDetailViewModel @Inject constructor(
                                 field = action.data.field
                             )
                         )
-                    }.also {
-                        _resultSavedStatus.value = ResultSavedStatusModel.Saved
+                        _resultSavedStatus.value = ResultSavedStatusModel.Saved(emptyList())
                     }
                 }
             }

@@ -53,7 +53,7 @@ class FarmerDetailFragment: Fragment() {
                         ResultSavedStatusModel.Pending -> {
                             enableViews()
                         }
-                        ResultSavedStatusModel.Saved -> {
+                        is ResultSavedStatusModel.Saved -> {
                             enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.user_saved), Snackbar.LENGTH_SHORT).show()
                             val action =

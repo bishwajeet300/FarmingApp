@@ -8,11 +8,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.farmingapp.R
+import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentCropSelectionWaterCalculationBinding
 import com.farmingapp.model.CropSelectionWaterCalculationUserModel
+import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultSavedStatusModel
 import com.farmingapp.model.UserAction
+import com.farmingapp.view.helper.ResultAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -24,6 +31,11 @@ class CropSelectionWaterCalculationFragment : Fragment() {
     private var _binding: FragmentCropSelectionWaterCalculationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CropSelectionWaterCalculationViewModel by viewModels()
+    private lateinit var bottomSheetResultDialog: BottomSheetDialog
+    private lateinit var bottomSheetCropDialog: BottomSheetDialog
+    private lateinit var bottomSheetSoilDialog: BottomSheetDialog
+    private lateinit var bottomSheetEPanDialog: BottomSheetDialog
+    private lateinit var resultAdapter: ResultAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +60,9 @@ class CropSelectionWaterCalculationFragment : Fragment() {
                         ResultSavedStatusModel.Pending -> {
                             enableViews()
                         }
-                        ResultSavedStatusModel.Saved -> {
+                        is ResultSavedStatusModel.Saved -> {
                             disableViews()
-                            // Open Bottom sheet with results
+                            setupResultBottomSheet(value.resultList, value.isTerraceField)
                         }
                     }
                 }
@@ -58,6 +70,33 @@ class CropSelectionWaterCalculationFragment : Fragment() {
         }
 
         setupClickListener()
+    }
+
+    private fun setupResultBottomSheet(resultList: List<GenericResultModel>, isTerraceField: Boolean) {
+        bottomSheetResultDialog = BottomSheetDialog(requireContext())
+        val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
+        bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
+
+        resultAdapter = ResultAdapter(resultList)
+        resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        resultBottomSheetBinding.rvResult.adapter = resultAdapter
+
+        resultBottomSheetBinding.btnNext.setOnClickListener {
+            if (bottomSheetResultDialog.isShowing) {
+                bottomSheetResultDialog.dismissWithAnimation
+            }
+            if (isTerraceField) {
+                val action = CropSelectionWaterCalculationFragmentDirections.actionCropSelectionWaterCalculationFragmentToTerraceDetailsFragment()
+                findNavController().navigate(action)
+            } else {
+                val action = CropSelectionWaterCalculationFragmentDirections.actionCropSelectionWaterCalculationFragmentToPlainFieldDipperWaterCalculationFragment()
+                findNavController().navigate(action)
+            }
+        }
+
+        if (bottomSheetResultDialog.isShowing.not()) {
+            bottomSheetResultDialog.show()
+        }
     }
 
     private fun setupClickListener() {

@@ -8,8 +8,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.farmingapp.R
+import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentTerraceDetailsBinding
+import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultSavedStatusModel
+import com.farmingapp.view.cropandwater.CropSelectionWaterCalculationFragmentDirections
+import com.farmingapp.view.helper.ResultAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,6 +30,8 @@ class TerraceDetailsFragment : Fragment() {
     private var _binding: FragmentTerraceDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TerraceDetailsViewModel by viewModels()
+    private lateinit var bottomSheetResultDialog: BottomSheetDialog
+    private lateinit var resultAdapter: ResultAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,13 +40,21 @@ class TerraceDetailsFragment : Fragment() {
         _binding = FragmentTerraceDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
-                        is ResultSavedStatusModel.Failure -> TODO()
-                        ResultSavedStatusModel.Pending -> TODO()
-                        ResultSavedStatusModel.Saved -> TODO()
+                        is ResultSavedStatusModel.Failure -> {
+                            enableViews()
+                            Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
+                        }
+                        ResultSavedStatusModel.Pending -> {
+                            enableViews()
+                        }
+                        is ResultSavedStatusModel.Saved -> {
+                            disableViews()
+                            setupResultBottomSheet(value.resultList)
+                        }
                     }
                 }
             }
@@ -45,8 +65,45 @@ class TerraceDetailsFragment : Fragment() {
         return view
     }
 
+    private fun setupResultBottomSheet(resultList: List<GenericResultModel>) {
+        bottomSheetResultDialog = BottomSheetDialog(requireContext())
+        val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
+        bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
+
+        resultAdapter = ResultAdapter(resultList)
+        resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        resultBottomSheetBinding.rvResult.adapter = resultAdapter
+
+        resultBottomSheetBinding.btnNext.setOnClickListener {
+            if (bottomSheetResultDialog.isShowing) {
+                bottomSheetResultDialog.dismissWithAnimation
+            }
+
+            val action = TerraceDetailsFragmentDirections.actionTerraceDetailsFragmentToTerraceFieldLateralDetailsFragment()
+            findNavController().navigate(action)
+        }
+
+        if (bottomSheetResultDialog.isShowing.not()) {
+            bottomSheetResultDialog.show()
+        }
+    }
+
     private fun setupClickListener() {
 
+    }
+
+    private fun disableViews() {
+        binding.btnBack.isEnabled = false
+        binding.btnReset.isEnabled = false
+        binding.btnSubmit.isEnabled = false
+        
+    }
+
+    private fun enableViews() {
+        binding.btnBack.isEnabled = true
+        binding.btnReset.isEnabled = true
+        binding.btnSubmit.isEnabled = true
+    
     }
 
     override fun onDestroyView() {

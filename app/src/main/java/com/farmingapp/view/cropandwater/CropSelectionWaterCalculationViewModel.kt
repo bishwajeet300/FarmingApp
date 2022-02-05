@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
 import com.farmingapp.datasource.entity.CropSelectionWaterCalculationEntity
 import com.farmingapp.model.CropSelectionWaterCalculationUserModel
+import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultSavedStatusModel
 import com.farmingapp.model.UserAction
+import com.farmingapp.view.landing.FieldDesign
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,11 +45,21 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                                 wetted_area = action.data.wettedArea
                             )
                         )
-                    }.also {
-
                         // Do calculation and push result model
 
-                        _resultSavedStatus.value = ResultSavedStatusModel.Saved
+                        if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
+                            _resultSavedStatus.value = ResultSavedStatusModel.Saved(listOf(
+                                GenericResultModel("key1", "Label1", "Value1"),
+                                GenericResultModel("key2", "Label2", "Value2"),
+                                GenericResultModel("key3", "Label3", "Value3")
+                            ), isTerraceField = false)
+                        } else {
+                            _resultSavedStatus.value = ResultSavedStatusModel.Saved(listOf(
+                                GenericResultModel("key1", "Label1", "Value1"),
+                                GenericResultModel("key2", "Label2", "Value2"),
+                                GenericResultModel("key3", "Label3", "Value3")
+                            ))
+                        }
                     }
                 }
             }
