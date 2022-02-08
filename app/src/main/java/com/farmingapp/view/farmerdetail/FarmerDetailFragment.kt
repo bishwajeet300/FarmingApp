@@ -83,6 +83,10 @@ class FarmerDetailFragment: Fragment() {
                 )
             )
         }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun enableViews() {

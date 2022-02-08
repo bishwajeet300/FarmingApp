@@ -22,11 +22,8 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-        val view = binding.root
 
-        setupNavigation()
-
-        return view
+        return binding.root
     }
 
     private fun setupNavigation() {
@@ -44,6 +41,11 @@ class SplashFragment : Fragment() {
         } catch (e: Exception) {
             print(e.message)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupNavigation()
     }
 
     override fun onDestroyView() {

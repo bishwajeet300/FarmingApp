@@ -1,4 +1,5 @@
 package com.farmingapp.view.cropandwater
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.farmingapp.R
+import com.farmingapp.databinding.BottomsheetOptionsBinding
 import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentCropSelectionWaterCalculationBinding
-import com.farmingapp.model.CropSelectionWaterCalculationUserModel
-import com.farmingapp.model.GenericResultModel
-import com.farmingapp.model.ResultSavedStatusModel
-import com.farmingapp.model.UserAction
+import com.farmingapp.model.*
+import com.farmingapp.view.helper.OnOptionsClickListener
+import com.farmingapp.view.helper.OptionsAdapter
 import com.farmingapp.view.helper.ResultAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CropSelectionWaterCalculationFragment : Fragment() {
+class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener {
 
     private var _binding: FragmentCropSelectionWaterCalculationBinding? = null
     private val binding get() = _binding!!
@@ -36,6 +37,9 @@ class CropSelectionWaterCalculationFragment : Fragment() {
     private lateinit var bottomSheetSoilDialog: BottomSheetDialog
     private lateinit var bottomSheetEPanDialog: BottomSheetDialog
     private lateinit var resultAdapter: ResultAdapter
+    private lateinit var cropOptionsAdapter: OptionsAdapter
+    private lateinit var soilOptionsAdapter: OptionsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,13 +73,49 @@ class CropSelectionWaterCalculationFragment : Fragment() {
             }
         }
 
+        setupSoilOptions()
+        setupCropOptions()
         setupClickListener()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupSoilOptions() {
+        bottomSheetSoilDialog = BottomSheetDialog(requireContext())
+        val soilBottomSheetBinding = BottomsheetOptionsBinding.inflate(layoutInflater, null, false)
+        bottomSheetSoilDialog.setContentView(soilBottomSheetBinding.root)
+
+        soilOptionsAdapter = OptionsAdapter(OptionsType.SOIL, getSoilList(), this)
+        soilBottomSheetBinding.rvOptions.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        soilBottomSheetBinding.rvOptions.adapter = soilOptionsAdapter
+
+        binding.etSoilType.setOnTouchListener { v, _ ->
+            bottomSheetSoilDialog.show()
+            v.performClick()
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupCropOptions() {
+        bottomSheetCropDialog = BottomSheetDialog(requireContext())
+        val cropBottomSheetBinding = BottomsheetOptionsBinding.inflate(layoutInflater, null, false)
+        bottomSheetCropDialog.setContentView(cropBottomSheetBinding.root)
+
+        cropOptionsAdapter = OptionsAdapter(OptionsType.CROP, getCropList(), this)
+        cropBottomSheetBinding.rvOptions.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        cropBottomSheetBinding.rvOptions.adapter = cropOptionsAdapter
+
+        binding.etCropName.setOnTouchListener { v, _ ->
+            bottomSheetCropDialog.show()
+            v.performClick()
+        }
     }
 
     private fun setupResultBottomSheet(resultList: List<GenericResultModel>, isTerraceField: Boolean) {
         bottomSheetResultDialog = BottomSheetDialog(requireContext())
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
+        bottomSheetResultDialog.setCancelable(false)
+        bottomSheetResultDialog.setCanceledOnTouchOutside(false)
 
         resultAdapter = ResultAdapter(resultList)
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -83,7 +123,8 @@ class CropSelectionWaterCalculationFragment : Fragment() {
 
         resultBottomSheetBinding.btnNext.setOnClickListener {
             if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.dismissWithAnimation
+                bottomSheetResultDialog.setCancelable(true)
+                bottomSheetResultDialog.dismiss()
             }
             if (isTerraceField) {
                 val action = CropSelectionWaterCalculationFragmentDirections.actionCropSelectionWaterCalculationFragmentToTerraceDetailsFragment()
@@ -103,7 +144,7 @@ class CropSelectionWaterCalculationFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             disableViews()
             viewModel.receiveUserAction(
-                UserAction.Submit(
+                CropSelectionWaterCalculationAction.Submit(
                     CropSelectionWaterCalculationUserModel(
                         cropName = binding.etCropName.text.toString(),
                         soilType = binding.etSoilType.text.toString(),
@@ -116,6 +157,33 @@ class CropSelectionWaterCalculationFragment : Fragment() {
                 )
             )
         }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    override fun onOptionsClick(type: OptionsType, model: GenericOptionModel) {
+        when (type) {
+            OptionsType.SOIL -> {
+                binding.etSoilType.setText(model.label)
+                if (bottomSheetSoilDialog.isShowing) {
+                    bottomSheetSoilDialog.dismiss()
+                }
+            }
+            OptionsType.CROP -> {
+                binding.etCropName.setText(model.label)
+                if (bottomSheetCropDialog.isShowing) {
+                    bottomSheetCropDialog.dismiss()
+                }
+            }
+        }
+
+        viewModel.receiveUserAction(
+            CropSelectionWaterCalculationAction.SaveOption(
+                model, type
+            )
+        )
     }
 
     private fun disableViews() {
@@ -147,5 +215,50 @@ class CropSelectionWaterCalculationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getCropList(): List<GenericOptionModel> {
+        return listOf(
+            GenericOptionModel("wheat", "Wheat"),
+            GenericOptionModel("bean", "Bean"),
+            GenericOptionModel("cabbage", "Cabbage"),
+            GenericOptionModel("carrot", "Carrot"),
+            GenericOptionModel("cotton", "Cotton"),
+            GenericOptionModel("cucumber", "Cucumber"),
+            GenericOptionModel("squash", "Squash"),
+            GenericOptionModel("tomato", "Tomato"),
+            GenericOptionModel("pulses", "Pulses"),
+            GenericOptionModel("lentil", "Lentil"),
+            GenericOptionModel("spinach", "Spinach"),
+            GenericOptionModel("maize", "Maize"),
+            GenericOptionModel("millet", "Millet"),
+            GenericOptionModel("onion", "Onion"),
+            GenericOptionModel("peanut", "Peanut"),
+            GenericOptionModel("groundnut", "Groundnut"),
+            GenericOptionModel("pepper", "Pepper"),
+            GenericOptionModel("potato", "Potato"),
+            GenericOptionModel("radish", "Radish"),
+            GenericOptionModel("sorghum", "Sorghum"),
+            GenericOptionModel("soyabean", "Soy Bean"),
+            GenericOptionModel("sugarbeet", "Sugar Beet"),
+            GenericOptionModel("sunflower", "Sunflower"),
+            GenericOptionModel("tobacco", "Tobacco")
+        )
+    }
+
+    private fun getSoilList(): List<GenericOptionModel> {
+        return listOf(
+            GenericOptionModel("sand", "Sand"),
+            GenericOptionModel("loamy_sand", "Loamy Sand"),
+            GenericOptionModel("sandy_loam", "Sandy Loam"),
+            GenericOptionModel("loam", "Loam"),
+            GenericOptionModel("silt_loam", "Silt Loam"),
+            GenericOptionModel("sandy_clay_loam", "Sandy Clay Loam"),
+            GenericOptionModel("clay_loam", "Clay Loam"),
+            GenericOptionModel("silty_clay_loam", "Silty Clay Loam"),
+            GenericOptionModel("sandy_clay", "Sandy Clay"),
+            GenericOptionModel("silty_clay", "Silty Clay"),
+            GenericOptionModel("clay", "Clay")
+        )
     }
 }

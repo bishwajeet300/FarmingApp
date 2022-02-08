@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.farmingapp.databinding.FragmentShareDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,6 +28,9 @@ class ShareDetailsFragment : Fragment() {
 
     private fun setupClickListener() {
 
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun disableViews() {

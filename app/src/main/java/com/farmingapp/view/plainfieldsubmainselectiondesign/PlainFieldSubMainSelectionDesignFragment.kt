@@ -89,6 +89,9 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment() {
 
     private fun setupClickListener() {
 
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun disableViews() {
