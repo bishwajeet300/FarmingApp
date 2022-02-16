@@ -16,13 +16,15 @@ import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentTerraceDetailsBinding
 import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultSavedStatusModel
-import com.farmingapp.view.cropandwater.CropSelectionWaterCalculationFragmentDirections
+import com.farmingapp.model.TerraceDetailUserModel
+import com.farmingapp.model.UserAction
 import com.farmingapp.view.helper.ResultAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 @AndroidEntryPoint
 class TerraceDetailsFragment : Fragment() {
@@ -33,12 +35,23 @@ class TerraceDetailsFragment : Fragment() {
     private lateinit var bottomSheetResultDialog: BottomSheetDialog
     private lateinit var resultAdapter: ResultAdapter
 
+    private val lengthString: StringBuilder = StringBuilder()
+    private val widthString: StringBuilder = StringBuilder()
+    private val heightString: StringBuilder = StringBuilder()
+    private var eachLength: MutableList<Double> = mutableListOf()
+    private var eachWidth: MutableList<Double> = mutableListOf()
+    private var eachHeight: MutableList<Double> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTerraceDetailsBinding.inflate(inflater, container, false)
-        val view = binding.root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -61,8 +74,6 @@ class TerraceDetailsFragment : Fragment() {
         }
 
         setupClickListener()
-
-        return view
     }
 
     private fun setupResultBottomSheet(resultList: List<GenericResultModel>) {
@@ -89,24 +100,159 @@ class TerraceDetailsFragment : Fragment() {
     }
 
     private fun setupClickListener() {
+        binding.btnAddTerraceLength.setOnClickListener {
+            if (binding.etEachTerraceLength.text.isNullOrBlank().not()) {
+                binding.etEachTerraceLength.error = null
+                val entry = binding.etEachTerraceLength.text.toString()
+
+                if (lengthString.isEmpty()) {
+                    lengthString.append(entry)
+                } else {
+                    lengthString.append("\n").append(entry)
+                }
+                binding.tvTerraceLengths.setLines(binding.tvTerraceLengths.lineCount + 1)
+                binding.tvTerraceLengths.text = lengthString
+                eachLength.add(entry.toDouble())
+                binding.etTotalTerraceLength.setText("${eachLength.sum()}")
+            } else {
+                binding.etEachTerraceLength.error = resources.getString(R.string.value_missing)
+            }
+        }
+
+        binding.btnAddTerraceWidth.setOnClickListener {
+            if (binding.etEachTerraceWidth.text.isNullOrBlank().not()) {
+                binding.etEachTerraceWidth.error = null
+                val entry = binding.etEachTerraceWidth.text.toString()
+
+                if (widthString.isEmpty()) {
+                    widthString.append(entry)
+                } else {
+                    widthString.append("\n").append(entry)
+                }
+                binding.tvTerraceWidths.setLines(binding.tvTerraceWidths.lineCount + 1)
+                binding.tvTerraceWidths.text = widthString
+                eachWidth.add(entry.toDouble())
+                binding.etTotalTerraceWidth.setText("${eachWidth.sum()}")
+            } else {
+                binding.etEachTerraceWidth.error = resources.getString(R.string.value_missing)
+            }
+        }
+
+        binding.btnAddTerraceCumulativeHeight.setOnClickListener {
+            if (binding.etEachTerraceCumulativeHeight.text.isNullOrBlank().not()) {
+                binding.etEachTerraceCumulativeHeight.error = null
+                val entry = binding.etEachTerraceCumulativeHeight.text.toString()
+
+                if (heightString.isEmpty()) {
+                    heightString.append(entry)
+                } else {
+                    heightString.append("\n").append(entry)
+                }
+                binding.tvTerraceCumulativeHeights.setLines(binding.tvTerraceCumulativeHeights.lineCount + 1)
+                binding.tvTerraceCumulativeHeights.text = heightString
+                eachHeight.add(entry.toDouble())
+                binding.etTotalTerraceCumulativeHeight.setText("${eachHeight.sum()}")
+            } else {
+                binding.etEachTerraceCumulativeHeight.error = resources.getString(R.string.value_missing)
+            }
+        }
+
+        binding.btnSubmit.setOnClickListener {
+            if (isFormValidated()) {
+                disableViews()
+                viewModel.receiveUserAction(
+                    UserAction.Submit(
+                        TerraceDetailUserModel(
+                            eachTerraceLength = eachLength, eachTerraceWidth = eachWidth, eachTerraceHeight = eachHeight
+                        )
+                    )
+                )
+            }
+        }
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnReset.setOnClickListener {
+            resetViews()
+        }
+    }
+
+    private fun resetViews() {
+        enableViews()
+        lengthString.clear()
+        widthString.clear()
+        heightString.clear()
+        eachLength.clear()
+        eachHeight.clear()
+        eachWidth.clear()
+        binding.etTotalTerraceLength.setText("")
+        binding.etTotalTerraceWidth.setText("")
+        binding.etTotalTerraceCumulativeHeight.setText("")
+        binding.etEachTerraceLength.setText("")
+        binding.etEachTerraceWidth.setText("")
+        binding.etEachTerraceCumulativeHeight.setText("")
+        binding.tvTerraceLengths.text = ""
+        binding.tvTerraceWidths.text = ""
+        binding.tvTerraceCumulativeHeights.text = ""
     }
 
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
         binding.btnSubmit.isEnabled = false
-        
+        binding.etTotalTerraceLength.isEnabled = false
+        binding.etTotalTerraceWidth.isEnabled = false
+        binding.etTotalTerraceCumulativeHeight.isEnabled = false
+        binding.etEachTerraceLength.isEnabled = false
+        binding.etEachTerraceWidth.isEnabled = false
+        binding.etEachTerraceCumulativeHeight.isEnabled = false
+        binding.tvTerraceLengths.isEnabled = false
+        binding.tvTerraceWidths.isEnabled = false
+        binding.tvTerraceCumulativeHeights.isEnabled = false
     }
 
     private fun enableViews() {
         binding.btnBack.isEnabled = true
         binding.btnReset.isEnabled = true
         binding.btnSubmit.isEnabled = true
-    
+        binding.etTotalTerraceLength.isEnabled = true
+        binding.etTotalTerraceWidth.isEnabled = true
+        binding.etTotalTerraceCumulativeHeight.isEnabled = true
+        binding.etEachTerraceLength.isEnabled = true
+        binding.etEachTerraceWidth.isEnabled = true
+        binding.etEachTerraceCumulativeHeight.isEnabled = true
+        binding.tvTerraceLengths.isEnabled = true
+        binding.tvTerraceWidths.isEnabled = true
+        binding.tvTerraceCumulativeHeights.isEnabled = true
+    }
+
+    private fun isFormValidated(): Boolean {
+        var isValid = true
+
+        if (binding.etEachTerraceCumulativeHeight.text.isNullOrEmpty()) {
+            binding.etEachTerraceCumulativeHeight.error = "*Required"
+            isValid = false
+        } else {
+            binding.etEachTerraceCumulativeHeight.error = null
+        }
+
+        if (binding.etEachTerraceLength.text.isNullOrEmpty()) {
+            binding.etEachTerraceLength.error = "*Required"
+            isValid = false
+        } else {
+            binding.etEachTerraceLength.error = null
+        }
+
+        if (binding.etEachTerraceWidth.text.isNullOrEmpty()) {
+            binding.etEachTerraceWidth.error = "*Required"
+            isValid = false
+        } else {
+            binding.etEachTerraceWidth.error = null
+        }
+
+        return isValid
     }
 
     override fun onDestroyView() {

@@ -87,6 +87,18 @@ class FarmerDetailFragment: Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnReset.setOnClickListener {
+            resetViews()
+        }
+    }
+
+    private fun resetViews() {
+        enableViews()
+        binding.etFullName.setText("")
+        binding.etPhone.setText("")
+        binding.etEmail.setText("")
+        binding.etAddress.setText("")
     }
 
     private fun enableViews() {

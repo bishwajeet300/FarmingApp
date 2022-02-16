@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textCapWords" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -107,76 +107,6 @@
                 android:inputType="textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilOutletFactor"
-            style="@style/FormTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="@string/outlet_factor_hint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilMainlineLength">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etOutletFactor"
-                style="@style/FormEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:text="@string/value_outlet_factor"
-                android:importantForAutofill="no"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCalculatedHeadLoss"
-            style="@style/FormTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="@string/calculated_head_loss_hint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilOutletFactor">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCalculatedHeadLoss"
-                style="@style/FormEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilTotalDischargeOfMainline"
-            style="@style/FormTextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="@string/total_discharge_of_mainline_hint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilCalculatedHeadLoss">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTotalDischargeOfMainline"
-                style="@style/FormEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSubmit"
             style="@style/ButtonSecondary"
@@ -188,7 +118,7 @@
             android:text="@string/submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilTotalDischargeOfMainline" />
+            app:layout_constraintTop_toBottomOf="@+id/tilMainlineLength" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

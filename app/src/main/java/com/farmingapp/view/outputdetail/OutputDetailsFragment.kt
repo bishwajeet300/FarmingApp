@@ -9,15 +9,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.farmingapp.R
-import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentOutputDetailsBinding
-import com.farmingapp.model.GenericResultModel
-import com.farmingapp.model.ResultSavedStatusModel
-import com.farmingapp.view.helper.ResultAdapter
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.farmingapp.model.OutputDetailsResultModel
+import com.farmingapp.model.ResultFetchStatusModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -29,30 +24,30 @@ class OutputDetailsFragment : Fragment() {
     private var _binding: FragmentOutputDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: OutputDetailsViewModel by viewModels()
-    private lateinit var bottomSheetResultDialog: BottomSheetDialog
-    private lateinit var resultAdapter: ResultAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOutputDetailsBinding.inflate(inflater, container, false)
-        val view = binding.root
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.resultSavedStatus.collect { value ->
+                viewModel.resultFetchStatus.collect { value ->
                     when (value) {
-                        is ResultSavedStatusModel.Failure -> {
-                            enableViews()
+                        is ResultFetchStatusModel.Failure -> {
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
-                        ResultSavedStatusModel.Pending -> {
-                            enableViews()
+                        ResultFetchStatusModel.Pending -> {
+
                         }
-                        is ResultSavedStatusModel.Saved -> {
-                            disableViews()
-                            setupResultBottomSheet(value.resultList)
+                        is ResultFetchStatusModel.Success -> {
+                            setFormValues(value.data)
                         }
                     }
                 }
@@ -61,51 +56,35 @@ class OutputDetailsFragment : Fragment() {
 
         setupClickListener()
 
-        return view
+        viewModel.receiveUserAction()
     }
 
-    private fun setupResultBottomSheet(resultList: List<GenericResultModel>) {
-        bottomSheetResultDialog = BottomSheetDialog(requireContext())
-        val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
-        bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
+    private fun setFormValues(data: OutputDetailsResultModel) {
+        binding.etCropName.setText(data.cropName)
+        binding.etSoilType.setText(data.soilType)
+        binding.etPlantToPlantDistance.setText(data.plantDistance)
+        binding.etRowToRowDistance.setText(data.rowDistance)
+        binding.etSelectedDripperSize.setText(data.dripperSize)
+        binding.etDripperPerPlant.setText(data.dripperPerPlant)
+        binding.etSelectedLateralDiameter.setText(data.lateralDiameter)
+        binding.etLengthOfLateral.setText(data.lateralLength)
+        binding.etMainlineDiameter.setText(data.mainlineDiameter)
+        binding.etMainlineLength.setText(data.mainlineLength)
+        binding.etNumberOfLateralOnSubMain.setText(data.numberOfLateralSubMain)
+        binding.etNumberOfDripperForSubMain.setText(data.numberOfDripperForSubMain)
+        binding.etSelectedSubMainDiameter.setText(data.subMainDiameter)
+        binding.etLengthOfSubMain.setText(data.subMainLength)
+    }
 
-        resultAdapter = ResultAdapter(resultList)
-        resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        resultBottomSheetBinding.rvResult.adapter = resultAdapter
-
-        resultBottomSheetBinding.btnNext.setOnClickListener {
-            if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.dismissWithAnimation
-            }
-
+    private fun setupClickListener() {
+        binding.btnSubmit.setOnClickListener {
             val action = OutputDetailsFragmentDirections.actionOutputDetailsFragmentToCostDetailsFragment2()
             findNavController().navigate(action)
         }
 
-        if (bottomSheetResultDialog.isShowing.not()) {
-            bottomSheetResultDialog.show()
-        }
-    }
-
-    private fun setupClickListener() {
-
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
-
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-
     }
 
     override fun onDestroyView() {

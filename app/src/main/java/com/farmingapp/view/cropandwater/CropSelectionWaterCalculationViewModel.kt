@@ -99,7 +99,9 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                             GenericResultModel("eto", "ETo (mm/day)", "TBD"),
                             GenericResultModel("etc", "ETc (mm/day)", "TBD"),
                             GenericResultModel("e_pan", "E-Pan (mm/day)", action.data.ePan),
-                            GenericResultModel("crop_water_requirement", "Crop Water Requirement (lt/day/plant)", "TBD")
+                            GenericResultModel("crop_water_requirement", "Crop Water Requirement (lt/day/plant)", "TBD"),
+                            GenericResultModel("INFO", "", "Crop Information"),
+                            GenericResultModel("INFO", "", "Soil Information")
                         )
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {

@@ -51,7 +51,7 @@
     <string name="select_sub_main_diameter_hint">Sub-Main Diameter</string>
     <string name="add">Add</string>
     <string name="mainline_diameter_hint">Mainline Diameter</string>
-    <string name="mainline_length_hint">Mainline Length</string>
+    <string name="mainline_length_hint">Length of Mainline</string>
     <string name="outlet_factor_hint">Outlet Factor</string>
     <string name="value_outlet_factor">Taken as 0.35</string>
     <string name="calculated_head_loss_hint">Calculated Head-Loss (m)</string>
@@ -89,4 +89,8 @@
     <string name="user_saved">User information is saved</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="cost_detail_title">Cost Details</string>
+    <string name="some_fields_missing">Some fields are missing</string>
+    <string name="value_missing">Value missing</string>
+    <string name="_1">1</string>
+    <string name="application_not_found">Application not found</string>
 </resources>

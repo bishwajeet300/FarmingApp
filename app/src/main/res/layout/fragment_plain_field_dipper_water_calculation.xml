@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textCapWords" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -150,8 +150,8 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:maxLines="500" />
+                android:text="@string/_1"
+                android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -174,8 +174,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:maxLines="500" />
+                android:inputType="numberDecimal"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -198,8 +197,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:maxLines="500" />
+                android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton

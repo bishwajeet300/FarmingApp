@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textCapWords" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textCapWords" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textCapWords" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -219,9 +219,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -243,9 +242,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -267,9 +265,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -291,9 +288,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -315,9 +311,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -339,9 +334,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -363,9 +357,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -387,9 +380,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:maxLines="500"
                 android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -400,7 +392,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:text="@string/submit"
+            android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilLengthOfSubMain" />

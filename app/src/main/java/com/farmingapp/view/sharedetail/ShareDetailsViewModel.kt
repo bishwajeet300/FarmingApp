@@ -1,5 +1,4 @@
-package com.farmingapp.view.outputdetail
-
+package com.farmingapp.view.sharedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
 import com.farmingapp.model.OutputDetailsResultModel
 import com.farmingapp.model.ResultFetchStatusModel
-import com.farmingapp.model.ResultSavedStatusModel
-import com.farmingapp.model.SystemWaterSourceDetailsAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +15,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class OutputDetailsViewModel @Inject constructor(
+class ShareDetailsViewModel @Inject constructor(
     private val databaseService: DatabaseService,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {

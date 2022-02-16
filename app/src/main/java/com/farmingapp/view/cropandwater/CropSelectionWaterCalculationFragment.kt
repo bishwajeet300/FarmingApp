@@ -35,7 +35,6 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
     private lateinit var bottomSheetResultDialog: BottomSheetDialog
     private lateinit var bottomSheetCropDialog: BottomSheetDialog
     private lateinit var bottomSheetSoilDialog: BottomSheetDialog
-    private lateinit var bottomSheetEPanDialog: BottomSheetDialog
     private lateinit var resultAdapter: ResultAdapter
     private lateinit var cropOptionsAdapter: OptionsAdapter
     private lateinit var soilOptionsAdapter: OptionsAdapter
@@ -142,40 +141,45 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
 
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
-            disableViews()
-            viewModel.receiveUserAction(
-                CropSelectionWaterCalculationAction.Submit(
-                    CropSelectionWaterCalculationUserModel(
-                        cropName = binding.etCropName.text.toString(),
-                        soilType = binding.etSoilType.text.toString(),
-                        plantDistance = binding.etPlantToPlantDistance.text.toString(),
-                        rowDistance = binding.etRowToRowDistance.text.toString(),
-                        plantShadowArea = binding.etPlantShadowArea.text.toString(),
-                        ePan = binding.etEPan.text.toString(),
-                        wettedArea = binding.etWettedArea.text.toString()
+            if (isFormValidated()) {
+                disableViews()
+                viewModel.receiveUserAction(
+                    CropSelectionWaterCalculationAction.Submit(
+                        CropSelectionWaterCalculationUserModel(
+                            cropName = binding.etCropName.text.toString(),
+                            soilType = binding.etSoilType.text.toString(),
+                            plantDistance = binding.etPlantToPlantDistance.text.toString(),
+                            rowDistance = binding.etRowToRowDistance.text.toString(),
+                            plantShadowArea = binding.etPlantShadowArea.text.toString(),
+                            ePan = binding.etEPan.text.toString(),
+                            wettedArea = binding.etWettedArea.text.toString()
+                        )
                     )
                 )
-            )
+            }
         }
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnReset.setOnClickListener {
+            resetViews()
+        }
     }
 
     override fun onOptionsClick(type: OptionsType, model: GenericOptionModel) {
-        when (type) {
-            OptionsType.SOIL -> {
-                binding.etSoilType.setText(model.label)
-                if (bottomSheetSoilDialog.isShowing) {
-                    bottomSheetSoilDialog.dismiss()
-                }
+        if (type == OptionsType.SOIL) {
+            binding.etSoilType.setText(model.label)
+            if (bottomSheetSoilDialog.isShowing) {
+                bottomSheetSoilDialog.dismiss()
             }
-            OptionsType.CROP -> {
-                binding.etCropName.setText(model.label)
-                if (bottomSheetCropDialog.isShowing) {
-                    bottomSheetCropDialog.dismiss()
-                }
+        }
+
+        if (type == OptionsType.CROP) {
+            binding.etCropName.setText(model.label)
+            if (bottomSheetCropDialog.isShowing) {
+                bottomSheetCropDialog.dismiss()
             }
         }
 
@@ -184,6 +188,17 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
                 model, type
             )
         )
+    }
+
+    private fun resetViews() {
+        enableViews()
+        binding.etCropName.setText("")
+        binding.etSoilType.setText("")
+        binding.etEPan.setText("")
+        binding.etPlantShadowArea.setText("")
+        binding.etPlantToPlantDistance.setText("")
+        binding.etRowToRowDistance.setText("")
+        binding.etWettedArea.setText("")
     }
 
     private fun disableViews() {
@@ -210,6 +225,61 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
         binding.etPlantToPlantDistance.isEnabled = true
         binding.etRowToRowDistance.isEnabled = true
         binding.etWettedArea.isEnabled = true
+    }
+
+    private fun isFormValidated(): Boolean {
+        var isValid = true
+
+        if (binding.etCropName.text.isNullOrEmpty()) {
+            binding.etCropName.error = "*Required"
+            isValid = false
+        } else {
+            binding.etCropName.error = null
+        }
+
+        if (binding.etSoilType.text.isNullOrEmpty()) {
+            binding.etSoilType.error = "*Required"
+            isValid = false
+        } else {
+            binding.etSoilType.error = null
+        }
+
+        if (binding.etEPan.text.isNullOrEmpty()) {
+            binding.etEPan.error = "*Required"
+            isValid = false
+        } else {
+            binding.etEPan.error = null
+        }
+
+        if (binding.etPlantShadowArea.text.isNullOrEmpty()) {
+            binding.etPlantShadowArea.error = "*Required"
+            isValid = false
+        } else {
+            binding.etPlantShadowArea.error = null
+        }
+
+        if (binding.etPlantToPlantDistance.text.isNullOrEmpty()) {
+            binding.etPlantToPlantDistance.error = "*Required"
+            isValid = false
+        } else {
+            binding.etPlantToPlantDistance.error = null
+        }
+
+        if (binding.etRowToRowDistance.text.isNullOrEmpty()) {
+            binding.etRowToRowDistance.error = "*Required"
+            isValid = false
+        } else {
+            binding.etRowToRowDistance.error = null
+        }
+
+        if (binding.etWettedArea.text.isNullOrEmpty()) {
+            binding.etWettedArea.error = "*Required"
+            isValid = false
+        } else {
+            binding.etWettedArea.error = null
+        }
+
+        return isValid
     }
 
     override fun onDestroyView() {

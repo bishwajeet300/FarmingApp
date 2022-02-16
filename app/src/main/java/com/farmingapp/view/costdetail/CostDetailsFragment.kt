@@ -70,6 +70,13 @@ class CostDetailsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.btnReset.setOnClickListener {
+            resetViews()
+        }
+    }
+
+    private fun resetViews() {
+        enableViews()
     }
 
     private fun setupResultBottomSheet(resultList: List<GenericResultModel>) {

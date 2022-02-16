@@ -1,7 +1,7 @@
 package com.farmingapp.model
 
 data class TerraceDetailUserModel(
-    val eachTerraceLength: String,
-    val eachTerraceWidth: String,
-    val eachTerraceHeight: String
+    val eachTerraceLength: List<Double>,
+    val eachTerraceWidth: List<Double>,
+    val eachTerraceHeight: List<Double>
 )
