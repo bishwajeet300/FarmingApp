@@ -100,7 +100,9 @@ class TerraceFieldLateralDetailsFragment : Fragment(), OnOptionsClickListener {
 
         resultBottomSheetBinding.btnNext.setOnClickListener {
             if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.dismissWithAnimation
+                bottomSheetResultDialog.setCancelable(true)
+                bottomSheetResultDialog.dismiss()
+                enableViews()
             }
 
             val action = TerraceFieldLateralDetailsFragmentDirections.actionTerraceFieldLateralDetailsFragmentToTerraceFieldLateralSelectionDesignFragment()

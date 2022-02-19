@@ -87,7 +87,9 @@ class TerraceDetailsFragment : Fragment() {
 
         resultBottomSheetBinding.btnNext.setOnClickListener {
             if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.dismissWithAnimation
+                bottomSheetResultDialog.setCancelable(true)
+                bottomSheetResultDialog.dismiss()
+                enableViews()
             }
 
             val action = TerraceDetailsFragmentDirections.actionTerraceDetailsFragmentToTerraceFieldLateralDetailsFragment()
@@ -114,6 +116,7 @@ class TerraceDetailsFragment : Fragment() {
                 binding.tvTerraceLengths.text = lengthString
                 eachLength.add(entry.toDouble())
                 binding.etTotalTerraceLength.setText("${eachLength.sum()}")
+                binding.etEachTerraceLength.setText("")
             } else {
                 binding.etEachTerraceLength.error = resources.getString(R.string.value_missing)
             }
@@ -133,6 +136,7 @@ class TerraceDetailsFragment : Fragment() {
                 binding.tvTerraceWidths.text = widthString
                 eachWidth.add(entry.toDouble())
                 binding.etTotalTerraceWidth.setText("${eachWidth.sum()}")
+                binding.etEachTerraceWidth.setText("")
             } else {
                 binding.etEachTerraceWidth.error = resources.getString(R.string.value_missing)
             }
@@ -152,6 +156,7 @@ class TerraceDetailsFragment : Fragment() {
                 binding.tvTerraceCumulativeHeights.text = heightString
                 eachHeight.add(entry.toDouble())
                 binding.etTotalTerraceCumulativeHeight.setText("${eachHeight.sum()}")
+                binding.etEachTerraceCumulativeHeight.setText("")
             } else {
                 binding.etEachTerraceCumulativeHeight.error = resources.getString(R.string.value_missing)
             }
@@ -231,21 +236,21 @@ class TerraceDetailsFragment : Fragment() {
     private fun isFormValidated(): Boolean {
         var isValid = true
 
-        if (binding.etEachTerraceCumulativeHeight.text.isNullOrEmpty()) {
+        if (binding.etTotalTerraceCumulativeHeight.text.isNullOrEmpty()) {
             binding.etEachTerraceCumulativeHeight.error = "*Required"
             isValid = false
         } else {
             binding.etEachTerraceCumulativeHeight.error = null
         }
 
-        if (binding.etEachTerraceLength.text.isNullOrEmpty()) {
+        if (binding.etTotalTerraceLength.text.isNullOrEmpty()) {
             binding.etEachTerraceLength.error = "*Required"
             isValid = false
         } else {
             binding.etEachTerraceLength.error = null
         }
 
-        if (binding.etEachTerraceWidth.text.isNullOrEmpty()) {
+        if (binding.etTotalTerraceWidth.text.isNullOrEmpty()) {
             binding.etEachTerraceWidth.error = "*Required"
             isValid = false
         } else {

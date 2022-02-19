@@ -100,7 +100,9 @@ class PlainFieldDipperWaterCalculationFragment : Fragment(), OnOptionsClickListe
 
         resultBottomSheetBinding.btnNext.setOnClickListener {
             if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.dismissWithAnimation
+                bottomSheetResultDialog.setCancelable(true)
+                bottomSheetResultDialog.dismiss()
+                enableViews()
             }
 
             val action = PlainFieldDipperWaterCalculationFragmentDirections.actionPlainFieldDipperWaterCalculationFragmentToPlainFieldLateralSelectionDesignFragment()

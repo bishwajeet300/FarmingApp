@@ -3,6 +3,7 @@ package com.farmingapp.model
 enum class OptionsType {
     SOIL,
     CROP,
+    EPAN,
     DRIPPER,
     LATERAL_DIAMETER,
     PIPE_MATERIAL,

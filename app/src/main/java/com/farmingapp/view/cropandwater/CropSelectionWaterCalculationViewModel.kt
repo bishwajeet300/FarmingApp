@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.roundToLong
 
 @HiltViewModel
 class CropSelectionWaterCalculationViewModel @Inject constructor(
@@ -27,33 +28,36 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
 
     private lateinit var crop: CropModel
     private lateinit var soil: SoilModel
+    private lateinit var ePan: EPanModel
 
     companion object {
         val cropList = listOf(
-            CropModel("wheat", "Wheat", 0.675),
-            CropModel("bean", "Bean", 0.7625),
-            CropModel("cabbage", "Cabbage", 0.7875),
-            CropModel("carrot", "Carrot", 0.7875),
-            CropModel("cotton", "Cotton", 0.775),
-            CropModel("cucumber", "Cucumber", 0.7),
-            CropModel("squash", "Squash", 0.7),
-            CropModel("tomato", "Tomato", 0.7875),
-            CropModel("pulses", "Pulses", 0.7),
-            CropModel("lentil", "Lentil", 0.7),
-            CropModel("spinach", "Spinach", 0.7375),
-            CropModel("maize", "Maize", 0.8375),
-            CropModel("millet", "Millet", 0.7),
-            CropModel("onion", "Onion", 0.8),
-            CropModel("peanut", "Peanut", 0.7375),
-            CropModel("groundnut", "Groundnut", 0.7375),
-            CropModel("pepper", "Pepper", 0.75),
-            CropModel("potato", "Potato", 0.8),
-            CropModel("radish", "Radish", 0.7125),
-            CropModel("sorghum", "Sorghum", 0.7125),
-            CropModel("soyabean", "Soyabean", 0.7),
-            CropModel("sugarbeet", "Sugarbeet", 0.8),
-            CropModel("sunflower", "Sunflower", 0.7),
-            CropModel("tobacco", "Tobacco", 0.775)
+            CropModel(key = "bean", label = "Bean", coefficient = 0.7625, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "broccoli", label = "Broccoli", coefficient = 0.7875, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "cabbage", label = "Cabbage", coefficient = 0.7875, scientificName = "Brassica Oleracea var. Capitata", climateRequirements = "Averages temperature of 25°C", soilRequirements = "pH 6.0 - pH 6.6", waterRequirements = null, harvesting = "Done when the heads are firm.", fieldPreparation = null, sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "carrot", label = "Carrot", coefficient = 0.7875, scientificName = "Daucus Carota", climateRequirements = "20°C To 25°C", soilRequirements = "Below pH 6.5", waterRequirements = "Irrigate the field once in 8-10 days", harvesting = "Should be harvested at the proper stage of maturity", fieldPreparation = null, sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "cauliflower", label = "Cauliflower", coefficient = 0.7875, scientificName = "Brassica Oleracea var. Botrytis", climateRequirements = "15°C To 20°C", soilRequirements = "pH 6.0- pH 6.6", waterRequirements = "5-8 irrigation are generally required For cauliflower crop.", harvesting = "Should be done in the morning Or evening.", fieldPreparation = null, sowingTime = "Jul-Sept", transplantTime = "Sept-Oct", isDetailsVisible = true),
+            CropModel(key = "cotton", label = "Cotton", coefficient = 0.775, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "cucumber", label = "Cucumber", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "groundnut", label = "Groundnut", coefficient = 0.7375, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "lentil", label = "Lentil", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "maize", label = "Maize", coefficient = 0.8375, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "millet", label = "Millet", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "onion", label = "Onion", coefficient = 0.8, scientificName = "Allium Cepa", climateRequirements = "12°C To 25°C", soilRequirements = "pH 5.8 - pH 6.5", waterRequirements = "Moisture context of the soil should be kept optimum", harvesting = null, fieldPreparation = "Seeds are sown in lines 4-5 cm apart", sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "peanut", label = "Peanut", coefficient = 0.7375, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "pepper", label = "Pepper", coefficient = 0.75, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "potato", label = "Potato", coefficient = 0.8, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "pulses", label = "Pulses", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "radish", label = "Radish", coefficient = 0.7125, scientificName = "Raphanus Sativus L", climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "sorghum", label = "Sorghum", coefficient = 0.7125, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "soyabean", label = "Soyabean", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "spinach", label = "Spinach", coefficient = 0.7375, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "squash", label = "Squash", coefficient = 0.7, scientificName = "Sechium Edule", climateRequirements = "20°C To 25°C", soilRequirements = "pH 5 - pH 6", waterRequirements = null, harvesting = "One plant can produce more than 300 fruits per year", fieldPreparation = "It Is mainly grown in rainy season", sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "sugarbeet", label = "Sugarbeet", coefficient = 0.8, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "sunflower", label = "Sunflower", coefficient = 0.7, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "tobacco", label = "Tobacco", coefficient = 0.775, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
+            CropModel(key = "tomato", label = "Tomato", coefficient = 0.7875, scientificName = "Lycopersicon Esculentum", climateRequirements = "18°C To 27°C.", soilRequirements = "pH 5.5 - pH 7.5", waterRequirements = "Every 10 days", harvesting = null, fieldPreparation = "spacing of 3X2.5ft under polyhouse And 2.5X2ft", sowingTime = null, transplantTime = null, isDetailsVisible = true),
+            CropModel(key = "wheat", label = "Wheat", coefficient = 0.675, scientificName = null, climateRequirements = null, soilRequirements = null, waterRequirements = null, harvesting = null, fieldPreparation = null, sowingTime = null, transplantTime = null),
         )
 
         val soilList = listOf(
@@ -68,6 +72,15 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
             SoilModel("sandy_clay", "Sandy Clay", 0.508, 0.43, 0.321, 0.221),
             SoilModel("silty_clay", "Silty Clay", 0.508, 0.479, 0.371, 0.251),
             SoilModel("clay", "Clay", 0.254, 0.475, 0.378, 0.635)
+        )
+
+        val ePanList = listOf(
+            EPanModel(key = "1", label = "1", value = 1),
+            EPanModel(key = "2", label = "2", value = 2),
+            EPanModel(key = "3", label = "3", value = 3),
+            EPanModel(key = "4", label = "4", value = 4),
+            EPanModel(key = "5", label = "5", value = 5),
+            EPanModel(key = "6", label = "6", value = 6)
         )
     }
 
@@ -84,25 +97,66 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                                 plant_distance = action.data.plantDistance,
                                 row_distance = action.data.rowDistance,
                                 plant_shadow_area = action.data.plantShadowArea,
-                                e_pan = action.data.ePan,
+                                e_pan = ePan.key,
                                 wetted_area = action.data.wettedArea
                             )
                         )
                         // Do calculation and push result model
 
-                        val resultList = listOf(
+                        val resultList = mutableListOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("crop_factor", "Crop Factor", crop.coefficient.toString()),
-                            GenericResultModel("crop_canopy", "Crop Canopy", "TBD"),
-                            GenericResultModel("area_each_plant", "Area for each plant", "TBD"),
+                            GenericResultModel("crop_canopy", "Crop Canopy", String.format("%.2f", action.data.plantShadowArea.toDouble()/(action.data.plantDistance.toDouble() * action.data.rowDistance.toDouble()))),
+                            GenericResultModel("area_each_plant", "Area for each plant", String.format("%.2f", action.data.plantDistance.toDouble() * action.data.rowDistance.toDouble())),
                             GenericResultModel("system_efficiency", "System Efficiency (%)", "Taken as 85%"),
                             GenericResultModel("k_pan", "K-Pan", "Taken as 0.7"),
-                            GenericResultModel("eto", "ETo (mm/day)", "TBD"),
-                            GenericResultModel("etc", "ETc (mm/day)", "TBD"),
-                            GenericResultModel("e_pan", "E-Pan (mm/day)", action.data.ePan),
-                            GenericResultModel("crop_water_requirement", "Crop Water Requirement (lt/day/plant)", "TBD"),
-                            GenericResultModel("INFO", "", "Crop Information"),
-                            GenericResultModel("INFO", "", "Soil Information")
+                            GenericResultModel("eto", "ETo (mm/day)", String.format("%.2f", 0.7 * ePan.value)),
+                            GenericResultModel("etc", "ETc (mm/day)", String.format("%.2f", 0.7 * ePan.value * crop.coefficient)),
+                            GenericResultModel("e_pan", "E-Pan (mm/day)", ePan.key)
                         )
+
+                        val waterRequirement = String.format("%.2f", (crop.coefficient * 0.7 * ePan.value * action.data.plantDistance.toDouble() * action.data.rowDistance.toDouble() * action.data.wettedArea.toDouble()) / 0.85)
+
+                        resultList.add(GenericResultModel("crop_water_requirement", "Crop Water Requirement (lt/day/plant)", waterRequirement))
+
+
+                        // Add Crop Details
+                        if (crop.isDetailsVisible) {
+                            resultList.add(GenericResultModel("INFO", "", "Information On Crop"))
+                            if (crop.scientificName != null) {
+                                resultList.add(GenericResultModel("s_scientific_name", "Scientific Name", crop.scientificName!!))
+                            }
+                            if (crop.climateRequirements != null) {
+                                resultList.add(GenericResultModel("s_climate_requirements", "Climate Requirements", crop.climateRequirements!!))
+                            }
+                            if (crop.soilRequirements != null) {
+                                resultList.add(GenericResultModel("s_soil_requirements", "Soil Requirements", crop.soilRequirements!!))
+                            }
+                            if (crop.waterRequirements != null) {
+                                resultList.add(GenericResultModel("s_water_requirements", "Water Requirements", crop.waterRequirements!!))
+                            }
+                            if (crop.harvesting != null) {
+                                resultList.add(GenericResultModel("s_harvesting", "Harvesting", crop.harvesting!!))
+                            }
+                            if (crop.fieldPreparation != null) {
+                                resultList.add(GenericResultModel("s_field_preparation", "Field Preparation", crop.fieldPreparation!!))
+                            }
+                            if (crop.sowingTime != null) {
+                                resultList.add(GenericResultModel("s_sowing_time", "Sowing Time", crop.sowingTime!!))
+                            }
+                            if (crop.transplantTime != null) {
+                                resultList.add(GenericResultModel("s_transplant_time", "Transplant Time", crop.transplantTime!!))
+                            }
+                        }
+
+                        // Add Soil Details
+                        resultList.addAll(listOf(
+                            GenericResultModel("INFO", "", "Information On Soil - ${soil.label}"),
+                            GenericResultModel("s_hydraulic_conductivity", "Hydraulic Conductivity (mm/hr)", soil.hydraulicConductivity.toString()),
+                            GenericResultModel("s_porosity", "Porosity", soil.porosity.toString()),
+                            GenericResultModel("s_capacity", "Field Capacity", soil.capacity.toString()),
+                            GenericResultModel("s_wilting_point", "Wilting Point", soil.wiltingPoint.toString())
+                        ))
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
@@ -113,13 +167,16 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                 }
             }
             is CropSelectionWaterCalculationAction.SaveOption -> {
-                when (action.type) {
-                    OptionsType.SOIL -> {
-                        soil = soilList.first { it.key == action.data.key }
-                    }
-                    OptionsType.CROP -> {
-                        crop = cropList.first { it.key == action.data.key }
-                    }
+                if (action.type == OptionsType.SOIL) {
+                    soil = soilList.first { it.key == action.data.key }
+                }
+
+                if (action.type == OptionsType.CROP) {
+                    crop = cropList.first { it.key == action.data.key }
+                }
+
+                if (action.type == OptionsType.EPAN) {
+                    ePan = ePanList.first { it.key == action.data.key }
                 }
             }
         }

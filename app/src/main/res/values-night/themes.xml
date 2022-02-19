@@ -53,6 +53,12 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="HeaderValue">
+        <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/orange_500</item>
+    </style>
+
     <style name="FormEditText">
         <item name="android:textAppearance">@style/TextInputEditTextAppearance</item>
         <item name="android:textColor">@color/white</item>

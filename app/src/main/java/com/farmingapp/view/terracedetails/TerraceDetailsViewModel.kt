@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
 import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.UserAction
-import com.farmingapp.view.landing.FieldDesign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,12 +33,15 @@ class TerraceDetailsViewModel @Inject constructor(
                     withContext(Dispatchers.IO) {
 
                         // Do calculation and push result model
+                        val areaList = action.data.eachTerraceLength.zip(action.data.eachTerraceWidth) { length, width -> length * width }
+                        val pressureList = action.data.eachTerraceHeight.map { it/10 }
 
                         val resultList = listOf(
-                            GenericResultModel("area_of_each_terrace", "Area of each Terrace", "TBD m2\nTBD m2\nTBD m2"),
-                            GenericResultModel("total_area_of_field", "Total area of field (m2)", "TBD m2"),
-                            GenericResultModel("pressure_available", "Pressure Available (kg/cm2)", "TBD kg/cm2"),
-                            GenericResultModel("total_pressure", "Total Pressure (kg/cm2)", "TBD kg/cm2"),
+                            GenericResultModel("INFO", "", "Calculated Result"),
+                            GenericResultModel("area_of_each_terrace", "Area of each Terrace", transformListForDisplay(areaList)),
+                            GenericResultModel("total_area_of_field", "Total area of field (m2)", "${areaList.sum()}"),
+                            GenericResultModel("pressure_available", "Pressure Available (kg/cm2)", transformListForDisplay(pressureList)),
+                            GenericResultModel("total_pressure", "Total Pressure (kg/cm2)", "${pressureList.sum()}"),
                         )
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList)
@@ -47,5 +49,18 @@ class TerraceDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun transformListForDisplay(list: List<Double>): String {
+        val result = StringBuilder()
+
+        for (value in list) {
+            if (result.isEmpty()) {
+                result.append(value)
+            } else {
+                result.append("\n").append(value)
+            }
+        }
+        return result.toString()
     }
 }

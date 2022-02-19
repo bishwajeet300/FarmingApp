@@ -34,10 +34,12 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
     private val viewModel: CropSelectionWaterCalculationViewModel by viewModels()
     private lateinit var bottomSheetResultDialog: BottomSheetDialog
     private lateinit var bottomSheetCropDialog: BottomSheetDialog
+    private lateinit var bottomSheetEPanDialog: BottomSheetDialog
     private lateinit var bottomSheetSoilDialog: BottomSheetDialog
     private lateinit var resultAdapter: ResultAdapter
     private lateinit var cropOptionsAdapter: OptionsAdapter
     private lateinit var soilOptionsAdapter: OptionsAdapter
+    private lateinit var ePanOptionsAdapter: OptionsAdapter
 
 
     override fun onCreateView(
@@ -74,6 +76,7 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
 
         setupSoilOptions()
         setupCropOptions()
+        setupEPanOptions()
         setupClickListener()
     }
 
@@ -109,12 +112,26 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupEPanOptions() {
+        bottomSheetEPanDialog = BottomSheetDialog(requireContext())
+        val ePanBottomSheetBinding = BottomsheetOptionsBinding.inflate(layoutInflater, null, false)
+        bottomSheetEPanDialog.setContentView(ePanBottomSheetBinding.root)
+
+        ePanOptionsAdapter = OptionsAdapter(OptionsType.EPAN, getEPanList(), this)
+        ePanBottomSheetBinding.rvOptions.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        ePanBottomSheetBinding.rvOptions.adapter = ePanOptionsAdapter
+
+        binding.etEPan.setOnTouchListener { v, _ ->
+            bottomSheetEPanDialog.show()
+            v.performClick()
+        }
+    }
+
     private fun setupResultBottomSheet(resultList: List<GenericResultModel>, isTerraceField: Boolean) {
         bottomSheetResultDialog = BottomSheetDialog(requireContext())
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
-        bottomSheetResultDialog.setCancelable(false)
-        bottomSheetResultDialog.setCanceledOnTouchOutside(false)
 
         resultAdapter = ResultAdapter(resultList)
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -124,6 +141,7 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
             if (bottomSheetResultDialog.isShowing) {
                 bottomSheetResultDialog.setCancelable(true)
                 bottomSheetResultDialog.dismiss()
+                enableViews()
             }
             if (isTerraceField) {
                 val action = CropSelectionWaterCalculationFragmentDirections.actionCropSelectionWaterCalculationFragmentToTerraceDetailsFragment()
@@ -146,12 +164,9 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
                 viewModel.receiveUserAction(
                     CropSelectionWaterCalculationAction.Submit(
                         CropSelectionWaterCalculationUserModel(
-                            cropName = binding.etCropName.text.toString(),
-                            soilType = binding.etSoilType.text.toString(),
                             plantDistance = binding.etPlantToPlantDistance.text.toString(),
                             rowDistance = binding.etRowToRowDistance.text.toString(),
                             plantShadowArea = binding.etPlantShadowArea.text.toString(),
-                            ePan = binding.etEPan.text.toString(),
                             wettedArea = binding.etWettedArea.text.toString()
                         )
                     )
@@ -180,6 +195,13 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
             binding.etCropName.setText(model.label)
             if (bottomSheetCropDialog.isShowing) {
                 bottomSheetCropDialog.dismiss()
+            }
+        }
+
+        if (type == OptionsType.EPAN) {
+            binding.etEPan.setText(model.label)
+            if (bottomSheetEPanDialog.isShowing) {
+                bottomSheetEPanDialog.dismiss()
             }
         }
 
@@ -289,30 +311,30 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
 
     private fun getCropList(): List<GenericOptionModel> {
         return listOf(
-            GenericOptionModel("wheat", "Wheat"),
-            GenericOptionModel("bean", "Bean"),
-            GenericOptionModel("cabbage", "Cabbage"),
-            GenericOptionModel("carrot", "Carrot"),
-            GenericOptionModel("cotton", "Cotton"),
-            GenericOptionModel("cucumber", "Cucumber"),
-            GenericOptionModel("squash", "Squash"),
-            GenericOptionModel("tomato", "Tomato"),
-            GenericOptionModel("pulses", "Pulses"),
-            GenericOptionModel("lentil", "Lentil"),
-            GenericOptionModel("spinach", "Spinach"),
-            GenericOptionModel("maize", "Maize"),
-            GenericOptionModel("millet", "Millet"),
-            GenericOptionModel("onion", "Onion"),
-            GenericOptionModel("peanut", "Peanut"),
-            GenericOptionModel("groundnut", "Groundnut"),
-            GenericOptionModel("pepper", "Pepper"),
-            GenericOptionModel("potato", "Potato"),
-            GenericOptionModel("radish", "Radish"),
-            GenericOptionModel("sorghum", "Sorghum"),
-            GenericOptionModel("soyabean", "Soy Bean"),
-            GenericOptionModel("sugarbeet", "Sugar Beet"),
-            GenericOptionModel("sunflower", "Sunflower"),
-            GenericOptionModel("tobacco", "Tobacco")
+            GenericOptionModel(key = "bean", label = "Bean"),
+            GenericOptionModel(key = "broccoli", label = "Broccoli"),
+            GenericOptionModel(key = "cabbage", label = "Cabbage"),
+            GenericOptionModel(key = "carrot", label = "Carrot"),
+            GenericOptionModel(key = "cauliflower", label = "Cauliflower"),
+            GenericOptionModel(key = "cotton", label = "Cotton"),
+            GenericOptionModel(key = "cucumber", label = "Cucumber"),
+            GenericOptionModel(key = "groundnut", label = "Groundnut"),
+            GenericOptionModel(key = "lentil", label = "Lentil"),
+            GenericOptionModel(key = "maize", label = "Maize"),
+            GenericOptionModel(key = "millet", label = "Millet"),
+            GenericOptionModel(key = "onion", label = "Onion"),
+            GenericOptionModel(key = "peanut", label = "Peanut"),
+            GenericOptionModel(key = "pepper", label = "Pepper"),
+            GenericOptionModel(key = "potato", label = "Potato"),
+            GenericOptionModel(key = "pulses", label = "Pulses"),
+            GenericOptionModel(key = "radish", label = "Radish"),
+            GenericOptionModel(key = "sorghum", label = "Sorghum"),
+            GenericOptionModel(key = "soyabean", label = "Soyabean"),
+            GenericOptionModel(key = "spinach", label = "Spinach"),
+            GenericOptionModel(key = "squash", label = "Squash"),
+            GenericOptionModel(key = "sugarbeet", label = "Sugarbeet"),
+            GenericOptionModel(key = "sunflower", label = "Sunflower"),
+            GenericOptionModel(key = "tobacco", label = "Tobacco")
         )
     }
 
@@ -329,6 +351,17 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
             GenericOptionModel("sandy_clay", "Sandy Clay"),
             GenericOptionModel("silty_clay", "Silty Clay"),
             GenericOptionModel("clay", "Clay")
+        )
+    }
+
+    private fun getEPanList(): List<GenericOptionModel> {
+        return listOf(
+            GenericOptionModel("1", "1"),
+            GenericOptionModel("2", "2"),
+            GenericOptionModel("3", "3"),
+            GenericOptionModel("4", "4"),
+            GenericOptionModel("5", "5"),
+            GenericOptionModel("6", "6")
         )
     }
 }

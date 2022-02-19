@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        style="@style/TextValue"
+        style="@style/HeaderValue"
         android:text="@string/value"
         android:layout_marginStart="10dp"
         android:textAlignment="viewStart"
