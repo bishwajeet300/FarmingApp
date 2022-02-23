@@ -49,6 +49,7 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("suggested_filter", "Suggested Filter", "TBD"),
                         )
 

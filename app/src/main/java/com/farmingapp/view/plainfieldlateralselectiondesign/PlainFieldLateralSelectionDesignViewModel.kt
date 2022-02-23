@@ -29,9 +29,9 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val lateralDiameterList = listOf(
-            LateralDiameter(key = "12", label = "12 mm", value = "12"),
-            LateralDiameter(key = "16", label = "16 mm", value = "16"),
-            LateralDiameter(key = "20", label = "20 mm", value = "20")
+            LateralDiameter(key = "12", label = "12 mm", value = "12", internalDiameter = "9.6"),
+            LateralDiameter(key = "16", label = "16 mm", value = "16", internalDiameter = "12.7"),
+            LateralDiameter(key = "20", label = "20 mm", value = "20", internalDiameter = "16.5")
         )
 
         val pipeMaterialList = listOf(
@@ -53,6 +53,7 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral", "TBD"),
                             GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral", "TBD"),
                             GenericResultModel("head_loss", "Head Loss (m)", "TBD"),

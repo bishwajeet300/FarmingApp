@@ -151,7 +151,8 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 binding.tvLateralTerraceLengths.setLines(binding.tvLateralTerraceLengths.lineCount + 1)
                 binding.tvLateralTerraceLengths.text = lateralLengthString
                 eachLateralLength.add(entry.toDouble())
-                binding.etTotalLateralLength.setText("${eachLateralLength.sum()}")
+                binding.etTotalLateralLength.setText("${eachLateralLength.sum().times(binding.etLateralTerraceNumber.text.toString().toInt())}")
+                binding.etEachLateralTerraceLength.setText("")
             } else {
                 binding.etEachLateralTerraceLength.error = resources.getString(R.string.value_missing)
             }
@@ -257,11 +258,11 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
             binding.etLateralTerraceNumber.error = null
         }
 
-        if (binding.etEachLateralTerraceLength.text.isNullOrEmpty()) {
-            binding.etEachLateralTerraceLength.error = "*Required"
+        if (binding.etTotalLateralLength.text.isNullOrEmpty()) {
+            binding.etTotalLateralLength.error = "*Required"
             isValid = false
         } else {
-            binding.etEachLateralTerraceLength.error = null
+            binding.etTotalLateralLength.error = null
         }
 
         return isValid

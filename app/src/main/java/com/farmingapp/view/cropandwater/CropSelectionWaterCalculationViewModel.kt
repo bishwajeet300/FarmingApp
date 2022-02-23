@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
 import com.farmingapp.datasource.entity.CropSelectionWaterCalculationEntity
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import kotlin.math.roundToLong
 @HiltViewModel
 class CropSelectionWaterCalculationViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -118,7 +120,7 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                         val waterRequirement = String.format("%.2f", (crop.coefficient * 0.7 * ePan.value * action.data.plantDistance.toDouble() * action.data.rowDistance.toDouble() * action.data.wettedArea.toDouble()) / 0.85)
 
                         resultList.add(GenericResultModel("crop_water_requirement", "Crop Water Requirement (lt/day/plant)", waterRequirement))
-
+                        preferences.setCropWaterRequirement(waterRequirement)
 
                         // Add Crop Details
                         if (crop.isDetailsVisible) {

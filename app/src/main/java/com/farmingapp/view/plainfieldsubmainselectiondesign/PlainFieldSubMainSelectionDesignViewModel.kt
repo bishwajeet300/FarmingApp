@@ -29,11 +29,11 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val subMainDiameterList = listOf(
-            SubMainDiameter(key = "32", label = "32 mm", value = "32"),
-            SubMainDiameter(key = "40", label = "40 mm", value = "40"),
-            SubMainDiameter(key = "50", label = "50 mm", value = "50"),
-            SubMainDiameter(key = "63", label = "63 mm", value = "63"),
-            SubMainDiameter(key = "75", label = "75 mm", value = "75")
+            SubMainDiameter(key = "32", label = "32 mm", value = "32", subMainDiameter = "28.7"),
+            SubMainDiameter(key = "40", label = "40 mm", value = "40", subMainDiameter = "36.7"),
+            SubMainDiameter(key = "50", label = "50 mm", value = "50", subMainDiameter = "45.8"),
+            SubMainDiameter(key = "63", label = "63 mm", value = "63", subMainDiameter = "58"),
+            SubMainDiameter(key = "75", label = "75 mm", value = "75", subMainDiameter = "69")
         )
     }
 
@@ -43,6 +43,7 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
                             GenericResultModel("total_plants", "Total No. of Plants", "TBD"),
                             GenericResultModel("total_drippers", "Total No. of Drippers", "TBD"),

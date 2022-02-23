@@ -212,11 +212,11 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
             binding.etSubMainDiameter.error = null
         }
 
-        if (binding.etEachSubMainTerraceLength.text.isNullOrEmpty()) {
-            binding.etEachSubMainTerraceLength.error = "*Required"
+        if (binding.etTotalSubMainLength.text.isNullOrEmpty()) {
+            binding.etTotalSubMainLength.error = "*Required"
             isValid = false
         } else {
-            binding.etEachSubMainTerraceLength.error = null
+            binding.etTotalSubMainLength.error = null
         }
 
         return isValid

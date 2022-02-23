@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TerraceFieldLateralDetailsViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -27,9 +29,9 @@ class TerraceFieldLateralDetailsViewModel @Inject constructor(
 
     companion object {
         val dripperList = listOf(
-            DripperModel(key = "2", label = "2 lph", value = "2"),
-            DripperModel(key = "4", label = "4 lph", value = "4"),
-            DripperModel(key = "8", label = "8 lph", value = "8")
+            DripperModel(key = "2", label = "2 lph", value = "2", innerDiameter = "1.6"),
+            DripperModel(key = "4", label = "4 lph", value = "4", innerDiameter = "3.0"),
+            DripperModel(key = "8", label = "8 lph", value = "8", innerDiameter = "6.0")
         )
     }
 
@@ -39,11 +41,18 @@ class TerraceFieldLateralDetailsViewModel @Inject constructor(
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
-                            GenericResultModel(key = "area_of_each_terrace", label = "Area of each terrace (m2)", value = "TBD"),
-                            GenericResultModel(key = "total_area_of_field", label = "Total area of field (m2)", value = "TBD"),
-                            GenericResultModel(key = "pressure_available", label = "Pressure available (kg/cm2)", value = "TBD"),
-                            GenericResultModel(key = "total_pressure", label = "Total pressure (kg/cm2)", value = "TBD")
+                            GenericResultModel("INFO", "", "Calculated Result"),
+                            GenericResultModel(key = "crop_water_requirement", label = "Crop Water Requirement (lt/day/plant)", preferences.getCropWaterRequirement()),
+                            GenericResultModel(key = "area", label = "Area (m2)", value = preferences.getArea()),
+                            GenericResultModel(key = "drip_selected", label = "Drip Selected(lph) (Inner Diameter)", value = dripper.innerDiameter),
+                            GenericResultModel(key = "total_no_dripper", label = "Total No. of Dripper", value = "${(preferences.getArea().toDouble()/(action.data.dripperSpacing.toDouble() * action.data.lateralSpacing.toDouble())).toInt()}"),
+                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time(hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble()))
                         )
+                        preferences.setDripperInternalDiameter(dripper.innerDiameter)
+                        preferences.setDripperSpacing(action.data.dripperSpacing)
+                        preferences.setLateralSpacing(action.data.lateralSpacing)
+                        preferences.setTotalNumberOfDrippers("${(preferences.getArea().toDouble()/(action.data.dripperSpacing.toDouble() * action.data.lateralSpacing.toDouble())).toInt()}")
+                        preferences.setDripperPerPlant(action.data.dripperPerPlant)
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }

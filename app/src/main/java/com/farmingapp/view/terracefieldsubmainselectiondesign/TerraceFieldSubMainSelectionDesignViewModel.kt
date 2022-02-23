@@ -8,16 +8,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
+import com.farmingapp.view.helper.TransformationUtil
 import com.farmingapp.view.landing.FieldDesign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.pow
 
 @HiltViewModel
 class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,11 +32,11 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val subMainDiameterList = listOf(
-            SubMainDiameter(key = "32", label = "32 mm", value = "32"),
-            SubMainDiameter(key = "40", label = "40 mm", value = "40"),
-            SubMainDiameter(key = "50", label = "50 mm", value = "50"),
-            SubMainDiameter(key = "63", label = "63 mm", value = "63"),
-            SubMainDiameter(key = "75", label = "75 mm", value = "75")
+            SubMainDiameter(key = "32", label = "32 mm", value = "32", subMainDiameter = "28.7"),
+            SubMainDiameter(key = "40", label = "40 mm", value = "40", subMainDiameter = "36.7"),
+            SubMainDiameter(key = "50", label = "50 mm", value = "50", subMainDiameter = "45.8"),
+            SubMainDiameter(key = "63", label = "63 mm", value = "63", subMainDiameter = "58"),
+            SubMainDiameter(key = "75", label = "75 mm", value = "75", subMainDiameter = "69")
         )
     }
 
@@ -41,15 +45,25 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
             is TerraceFieldSubMainSelectionDesignAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
+                        val lateralFlowRate = TransformationUtil().transformStringToList(preferences.getLateralFlowRate())
+                        val flowRateList = lateralFlowRate.map { it * preferences.getNumberOfLateral().toInt() }
+
+                        val base = 10.0
+                        val factor = (1.21 * base.pow(10))/(preferences.getFrictionFactor().toDouble().pow(1.852)).times(subMainDiameter.subMainDiameter.toDouble().pow(-4.871)).times(0.35)
+                        val headLossList = flowRateList.zip(action.data.subMainLengthPerTerrace) { x3, x1 -> factor * x3.pow(1.852) * x1 }
+
+
                         val resultList = listOf(
-                            GenericResultModel("lateral_per_sub_main", "No. of Lateral per Sub-Main", "TBD"),
-                            GenericResultModel("flow_rate_sub_main", "Flow rate in Sub-Main (l/s)", "TBD"),
-                            GenericResultModel("head_loss_sub_main", "Head Loss in Sub-Main(m)", "TBD"),
+                            GenericResultModel("lateral_per_sub_main", "No. of Lateral per Sub-Main", preferences.getNumberOfLateral()),
+                            GenericResultModel("flow_rate_sub_main", "Flow rate in Sub-Main (l/s)", TransformationUtil().transformListToString(flowRateList)),
+                            GenericResultModel("total_flow_rate_sub_main", "Total Flow rate in Sub-Main (l/s)", String.format("%.4f", flowRateList.sum())),
+                            GenericResultModel("head_loss_sub_main", "Head Loss in Sub-Main(m)", TransformationUtil().transformListToString(headLossList)),
+                            GenericResultModel("total_head_loss_sub_main", "Total Head Loss in Sub-Main(m)", String.format("%.4f", headLossList.sum())),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
-                            GenericResultModel("total_plants", "Total No. of Plants", "TBD"),
-                            GenericResultModel("total_drippers", "Total No. of Drippers", "TBD"),
-                            GenericResultModel("avg_flowrate_sub_main", "Avg Flowrate of Sub-Main", "TBD"),
-                            GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter (mm)", "TBD")
+                            GenericResultModel("total_plants", "Total No. of Plants", "${preferences.getTotalNumberOfDrippers().toInt()/preferences.getDripperPerPlant().toInt()}"),
+                            GenericResultModel("total_drippers", "Total No. of Drippers", preferences.getTotalNumberOfDrippers()),
+                            GenericResultModel("avg_flowrate_sub_main", "Avg Flowrate of Sub-Main", String.format("%.7f", flowRateList.sum())),
+                            GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter (mm)", subMainDiameter.subMainDiameter)
                         )
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {

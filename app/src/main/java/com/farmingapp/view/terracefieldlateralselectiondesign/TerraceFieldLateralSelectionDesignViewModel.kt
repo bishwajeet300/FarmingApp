@@ -8,16 +8,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
+import com.farmingapp.view.helper.TransformationUtil
 import com.farmingapp.view.landing.FieldDesign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.pow
 
 @HiltViewModel
 class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -29,9 +33,9 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val lateralDiameterList = listOf(
-            LateralDiameter(key = "12", label = "12 mm", value = "12"),
-            LateralDiameter(key = "16", label = "16 mm", value = "16"),
-            LateralDiameter(key = "20", label = "20 mm", value = "20")
+            LateralDiameter(key = "12", label = "12 mm", value = "12", internalDiameter = "9.6"),
+            LateralDiameter(key = "16", label = "16 mm", value = "16", internalDiameter = "12.7"),
+            LateralDiameter(key = "20", label = "20 mm", value = "20", internalDiameter = "16.5")
         )
 
         val pipeMaterialList = listOf(
@@ -43,7 +47,7 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
             PipeMaterial(key = "pvc", label = "PVC", "150"),
             PipeMaterial(key = "smooth_pipes", label = "Smooth Pipes", "140"),
             PipeMaterial(key = "steel", label = "Steel", "145"),
-            PipeMaterial(key = "wrought_iron", label = "Wrought Iron", "100"),
+            PipeMaterial(key = "wrought_iron", label = "Wrought Iron", "100")
         )
     }
 
@@ -52,17 +56,42 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
             is TerraceFieldLateralSelectionDesignAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val resultList = listOf(
-                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral/Terrace", "TBD"),
-                            GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral/Terrace (l/s)", "TBD"),
-                            GenericResultModel("head_loss_each_terrace", "Head Loss for each Terrace", "TBD"),
-                            GenericResultModel("head_loss", "Head Loss (m)", "TBD"),
-                            GenericResultModel("friction_factor", "Friction Factor", "TBD"),
-                            GenericResultModel("total_dripper", "Total Drippers", "TBD"),
+                        val totalDripperList = action.data.lateralLengthPerTerrace.map { (it * action.data.lateralPerTerrace.toInt()).div(preferences.getDripperSpacing().toDouble()) }
+                        val flowRateList = totalDripperList.map { (it * preferences.getDripperInternalDiameter().toDouble()).div(3600) }
+                        val base = 10.0
+                        val factor = (1.21 * base.pow(10))/(pipeMaterial.value.toDouble().pow(1.852)).times(preferences.getLateralSpacing().toDouble().pow(-4.871)).times(0.35)
+
+                        val headLossList = flowRateList.zip(action.data.lateralLengthPerTerrace) { x3, x1 -> factor * x3.pow(1.852) * x1 }
+
+                        val lateralFlowRate = TransformationUtil().transformListToString(flowRateList)
+
+                        val resultList = mutableListOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
+                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral/Terrace", TransformationUtil().transformListToString(totalDripperList)),
+                            GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral/Terrace (l/s)", lateralFlowRate),
+                            GenericResultModel("head_loss_each_terrace", "Head Loss for each Terrace", TransformationUtil().transformListToString(headLossList)),
+                            GenericResultModel("head_loss", "Head Loss (m)", "${headLossList.sum()}"),
+                            GenericResultModel("friction_factor", "Friction Factor", pipeMaterial.value),
+                            GenericResultModel("total_dripper", "Total Drippers", "${totalDripperList.sum().times(3)}"),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
-                            GenericResultModel("discharge_emitter", "Discharge of Emitter (lph)", "TBD"),
-                            GenericResultModel("selected_lateral_internal_diameter", "Selected Lateral of\nInternal Diameter (mm)", "TBD")
+                            GenericResultModel("discharge_emitter", "Discharge of Emitter (lph)", "${action.data.lateralLengthPerTerrace.sum() * 3}"),
+                            GenericResultModel("selected_lateral_internal_diameter", "Selected Lateral of\nInternal Diameter (mm)", lateralDiameter.internalDiameter)
                         )
+
+                        val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
+
+                        var messageWarningFlag = false
+                        headLossList.forEachIndexed { index, value -> if (widthList[index] > value) { messageWarningFlag = true }}
+
+                        if (messageWarningFlag) {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Lateral size is wrong. The Calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
+                        } else {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-lateral size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
+                        }
+
+                        preferences.setNumberOfLateral(action.data.lateralPerTerrace)
+                        preferences.setLateralFlowRate(lateralFlowRate)
+                        preferences.setFrictionFactor(pipeMaterial.value)
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)

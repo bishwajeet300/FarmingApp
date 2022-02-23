@@ -44,6 +44,7 @@ class MainLineSelectionDesignViewModel @Inject constructor(
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
+                            GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
                             GenericResultModel("calculated_head_loss", "Calculated Head-Loss (m)", "TBD"),
                             GenericResultModel("discharge_main_line", "Total Discharge of Main-Line (lph)", "TBD"),
