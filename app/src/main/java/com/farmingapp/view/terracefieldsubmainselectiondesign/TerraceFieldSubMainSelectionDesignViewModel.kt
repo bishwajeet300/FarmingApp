@@ -53,7 +53,7 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                         val headLossList = flowRateList.zip(action.data.subMainLengthPerTerrace) { x3, x1 -> factor * x3.pow(1.852) * x1 }
 
 
-                        val resultList = listOf(
+                        val resultList = mutableListOf(
                             GenericResultModel("lateral_per_sub_main", "No. of Lateral per Sub-Main", preferences.getNumberOfLateral()),
                             GenericResultModel("flow_rate_sub_main", "Flow rate in Sub-Main (l/s)", TransformationUtil().transformListToString(flowRateList)),
                             GenericResultModel("total_flow_rate_sub_main", "Total Flow rate in Sub-Main (l/s)", String.format("%.4f", flowRateList.sum())),
@@ -65,6 +65,17 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                             GenericResultModel("avg_flowrate_sub_main", "Avg Flowrate of Sub-Main", String.format("%.7f", flowRateList.sum())),
                             GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter (mm)", subMainDiameter.subMainDiameter)
                         )
+
+                        val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
+
+                        var messageWarningFlag = false
+                        headLossList.forEachIndexed { index, value -> if (widthList[index] > value) { messageWarningFlag = true }}
+
+                        if (messageWarningFlag) {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The Calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
+                        } else {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
+                        }
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)

@@ -33,4 +33,10 @@ interface PreferencesManager {
 
     fun getDripperPerPlant(): String
     fun setDripperPerPlant(dripperPerPlant: String)
+
+    fun getDripperLateral(): String
+    fun setDripperLateral(dripperLateral: String)
+
+    fun getDripNumber(): String
+    fun setDripNumber(dripNumber: String)
 }

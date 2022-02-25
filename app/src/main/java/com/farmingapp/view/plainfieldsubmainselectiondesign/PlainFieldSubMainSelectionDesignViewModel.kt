@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
 import com.farmingapp.view.terracefieldsubmainselectiondesign.TerraceFieldSubMainSelectionDesignViewModel
@@ -15,10 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.pow
 
 @HiltViewModel
 class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -42,15 +45,27 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
             is PlainFieldSubMainSelectionDesignAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val resultList = listOf(
+                        val flowRate = (action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble())).times(2).times(preferences.getLateralFlowRate().toDouble())
+                        val base = 10.0
+                        var headLossFactor = 1.21 * base.pow(10) * action.data.subMainLength.toDouble() * 0.35 * (flowRate / 150).pow(1.852)
+                        headLossFactor *= subMainDiameter.subMainDiameter.toDouble().pow(-4.871)
+
+                        val resultList = mutableListOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
-                            GenericResultModel("total_plants", "Total No. of Plants", "TBD"),
-                            GenericResultModel("total_drippers", "Total No. of Drippers", "TBD"),
-                            GenericResultModel("total_lateral_per_sub_main", "Total No. of Lateral per Sub-Main", "TBD"),
-                            GenericResultModel("flow_rate_sub_main", "Flow rate in Sub-Main", "TBD"),
-                            GenericResultModel("head_loss_sub_main", "Head Loss in Sub-Main(m)", "TBD"),
+                            GenericResultModel("total_plants", "Total No. of Plants", String.format("%.4f", preferences.getDripperLateral().toDouble().div(preferences.getDripNumber().toDouble()))),
+                            GenericResultModel("total_drippers", "Total No. of Drippers", preferences.getDripperLateral()),
+                            GenericResultModel("total_lateral_per_sub_main", "Total No. of Lateral per Sub-Main", String.format("%.4f", action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble()).times(2))),
+                            GenericResultModel("flow_rate_sub_main", "Flow rate in Sub-Main", String.format("%.4f", flowRate)),
+                            GenericResultModel("head_loss_sub_main", "Head Loss in Sub-Main(m)", String.format("%.4f", headLossFactor)),
+                            GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter(mm)", subMainDiameter.subMainDiameter)
                         )
+
+                        if (headLossFactor > 2) {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The Calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
+                        } else {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
+                        }
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)

@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
-import com.farmingapp.view.terracefieldlateraldetail.TerraceFieldLateralDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -41,19 +42,22 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
-                            GenericResultModel(key = "crop_water_requirement", label = "Crop Water Requirement (l/day/plant)", value = "TBD"),
-                            GenericResultModel(key = "total_area_of_field", label = "Area (m2)", value = "TBD"),
-                            GenericResultModel(key = "internal_diameter_drip_selected", label = "Internal diameter of Drip Selected (lph)", value = "TBD"),
-                            GenericResultModel(key = "total_dripper", label = "Total No. of Dripper", value = "TBD"),
-                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time (hr)", value = "TBD")
+                            GenericResultModel(key = "crop_water_requirement", label = "Crop Water Requirement (l/day/plant)", value = preferences.getCropWaterRequirement()),
+                            GenericResultModel(key = "total_area_of_field", label = "Area (m2)", value = "${action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()}"),
+                            GenericResultModel(key = "internal_diameter_drip_selected", label = "Internal diameter of Drip Selected (lph)", value = dripper.innerDiameter),
+                            GenericResultModel(key = "total_dripper", label = "Total No. of Dripper", value = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(preferences.getLateralSpacing().toDouble() * preferences.getDripperSpacing().toDouble()))),
+                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time (hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble()))
                         )
+                        preferences.setLateralSpacing(action.data.lateralSpacing)
+                        preferences.setDripperSpacing(action.data.dripperSpacing)
+                        preferences.setDripNumber(action.data.dripperPerPlant)
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }
                 }
             }
             is PlainFieldDipperWaterCalculationAction.SaveOption -> {
-                dripper = TerraceFieldLateralDetailsViewModel.dripperList.first { it.key == action.data.key }
+                dripper = dripperList.first { it.key == action.data.key }
             }
         }
     }

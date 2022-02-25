@@ -108,6 +108,22 @@ class PreferencesManagerImpl @Inject constructor(
         setValue(DRIPPER_PER_PLANT, dripperPerPlant)
     }
 
+    override fun getDripperLateral(): String {
+        return getValue(DRIPPER_LATERAL)
+    }
+
+    override fun setDripperLateral(dripperLateral: String) {
+        setValue(DRIPPER_LATERAL, dripperLateral)
+    }
+
+    override fun getDripNumber(): String {
+        return getValue(DRIP_NUMBER)
+    }
+
+    override fun setDripNumber(dripNumber: String) {
+        setValue(DRIP_NUMBER, dripNumber)
+    }
+
     companion object {
         private const val PREFERENCES_FILE = "FarmingPrefs"
         private const val CROP_WATER_REQUIREMENT = "c_w_r"
@@ -121,5 +137,7 @@ class PreferencesManagerImpl @Inject constructor(
         private const val FRICTION_FACTOR = "friction_factor"
         private const val TOTAL_NO_OF_DRIPPERS = "t_n_o_d"
         private const val DRIPPER_PER_PLANT = "d_p_p"
+        private const val DRIPPER_LATERAL = "dripper_lateral"
+        private const val DRIP_NUMBER = "drip_number"
     }
 }

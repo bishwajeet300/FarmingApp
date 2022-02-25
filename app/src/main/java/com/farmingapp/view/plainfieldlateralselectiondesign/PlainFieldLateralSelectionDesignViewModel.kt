@@ -8,16 +8,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.pow
 
 @HiltViewModel
 class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -52,17 +55,32 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
             is PlainFieldLateralSelectionDesignAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val resultList = listOf(
+                        val dripperLateral = action.data.lateralLengthSubMain.toDouble().div(preferences.getDripperSpacing().toDouble())
+                        val frl = dripperLateral.times(lateralDiameter.internalDiameter.toDouble()).div(3600)
+                        val base = 10.0
+                        var headLossFactor = 1.21 * base.pow(10) * action.data.lateralLengthSubMain.toDouble() * 0.35 * lateralDiameter.internalDiameter.toDouble().pow(-4.871)
+                        headLossFactor *= (frl / pipeMaterial.value.toDouble()).pow(1.852)
+
+                        preferences.setDripperLateral("$dripperLateral")
+                        preferences.setLateralFlowRate(frl.toString())
+
+                        val resultList = mutableListOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
-                            GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral", "TBD"),
-                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral", "TBD"),
-                            GenericResultModel("head_loss", "Head Loss (m)", "TBD"),
-                            GenericResultModel("friction_factor", "Friction Factor", "TBD"),
+                            GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral", String.format("%.4f", frl)),
+                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral", String.format("%.4f", dripperLateral)),
+                            GenericResultModel("head_loss", "Head Loss (m)", String.format("%.4f", headLossFactor)),
+                            GenericResultModel("friction_factor", "Friction Factor", pipeMaterial.value),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
-                            GenericResultModel("selected_lateral_internal_diameter", "Selected Lateral of\nInternal Diameter (mm)", "TBD"),
-                            GenericResultModel("discharge_emitter", "Discharge of Emitter (lph)", "TBD"),
-                            GenericResultModel("length_lateral", "Total length of Lateral", "TBD")
+                            GenericResultModel("selected_lateral_internal_diameter", "Selected Lateral of\nInternal Diameter (mm)", lateralDiameter.internalDiameter),
+                            GenericResultModel("discharge_emitter", "Discharge of Emitter (lph)", lateralDiameter.internalDiameter),
+                            GenericResultModel("length_lateral", "Total length of Lateral", String.format("%.4f", preferences.getArea().toDouble().div(preferences.getLateralSpacing().toDouble())))
                         )
+
+                        if (headLossFactor > 2) {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Lateral size is wrong. The Calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
+                        } else {
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Lateral size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
+                        }
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
