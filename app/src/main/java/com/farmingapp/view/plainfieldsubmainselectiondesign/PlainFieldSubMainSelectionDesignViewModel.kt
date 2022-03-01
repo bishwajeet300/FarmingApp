@@ -61,8 +61,10 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
                             GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter(mm)", subMainDiameter.subMainDiameter)
                         )
 
+                        preferences.setSubMainFlowRate(String.format("%.4f", flowRate))
+
                         if (headLossFactor > 2) {
-                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The Calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
+                            resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))
                         } else {
                             resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                         }

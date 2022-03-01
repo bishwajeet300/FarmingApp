@@ -66,6 +66,8 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                             GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter (mm)", subMainDiameter.subMainDiameter)
                         )
 
+                        preferences.setAverageSubMainFlowRate(String.format("%.7f", flowRateList.sum()))
+
                         val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
 
                         var messageWarningFlag = false

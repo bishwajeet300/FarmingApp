@@ -124,6 +124,22 @@ class PreferencesManagerImpl @Inject constructor(
         setValue(DRIP_NUMBER, dripNumber)
     }
 
+    override fun getSubMainFlowRate(): String {
+        return getValue(SUB_MAIN_FLOW_RATE)
+    }
+
+    override fun setSubMainFlowRate(subMainFlowRate: String) {
+        setValue(SUB_MAIN_FLOW_RATE, subMainFlowRate)
+    }
+
+    override fun getAverageSubMainFlowRate(): String {
+        return getValue(AVG_SUB_MAIN_FLOW_RATE)
+    }
+
+    override fun setAverageSubMainFlowRate(averageSubMainFlowRate: String) {
+        setValue(AVG_SUB_MAIN_FLOW_RATE, averageSubMainFlowRate)
+    }
+
     companion object {
         private const val PREFERENCES_FILE = "FarmingPrefs"
         private const val CROP_WATER_REQUIREMENT = "c_w_r"
@@ -139,5 +155,7 @@ class PreferencesManagerImpl @Inject constructor(
         private const val DRIPPER_PER_PLANT = "d_p_p"
         private const val DRIPPER_LATERAL = "dripper_lateral"
         private const val DRIP_NUMBER = "drip_number"
+        private const val SUB_MAIN_FLOW_RATE = "sub_main_flow_rate"
+        private const val AVG_SUB_MAIN_FLOW_RATE = "avg_sub_main_flow_rate"
     }
 }

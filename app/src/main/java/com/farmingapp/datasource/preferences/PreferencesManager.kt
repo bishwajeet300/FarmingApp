@@ -39,4 +39,10 @@ interface PreferencesManager {
 
     fun getDripNumber(): String
     fun setDripNumber(dripNumber: String)
+
+    fun getSubMainFlowRate(): String
+    fun setSubMainFlowRate(subMainFlowRate: String)
+
+    fun getAverageSubMainFlowRate(): String
+    fun setAverageSubMainFlowRate(averageSubMainFlowRate: String)
 }
