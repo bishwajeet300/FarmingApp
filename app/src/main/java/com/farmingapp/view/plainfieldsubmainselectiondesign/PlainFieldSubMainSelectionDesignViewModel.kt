@@ -62,6 +62,10 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
                         )
 
                         preferences.setSubMainFlowRate(String.format("%.4f", flowRate))
+                        preferences.setNumberOfLateralSubMain(String.format("%.4f", action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble()).times(2)))
+                        preferences.setNumberOfDripperForSubMain(String.format("%.4f", action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble()).times(2)))
+                        preferences.setSubMainDiameter(subMainDiameter.label)
+                        preferences.setSubMainLength(action.data.subMainLength)
 
                         if (headLossFactor > 2) {
                             resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))

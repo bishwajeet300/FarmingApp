@@ -30,11 +30,11 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
 
     companion object {
         val waterSourceList = listOf(
-            WaterSource(key = "spring", label = "Spring", value = "spring"),
-            WaterSource(key = "river_nala", label = "River/Nala", value = "river_nala"),
-            WaterSource(key = "tube_well", label = "Tube Well", value = "tube_well"),
-            WaterSource(key = "pond_lake", label = "Pond/Lake", value = "pond_lake"),
-            WaterSource(key = "open_well", label = "Open Well", value = "open_well")
+            WaterSource(key = "spring", label = "Spring", value = "spring", filter = "Screen Filter"),
+            WaterSource(key = "river_nala", label = "River/Nala", value = "river_nala", filter = "Screen & Disk Filter"),
+            WaterSource(key = "tube_well", label = "Tube Well", value = "tube_well", filter = "Screen Filter"),
+            WaterSource(key = "pond_lake", label = "Pond/Lake", value = "pond_lake", filter = "Screen Filter"),
+            WaterSource(key = "open_well", label = "Open Well", value = "open_well", filter = "Screen & Disk Filter"),
         )
 
         val waterTankLocationList = listOf(
@@ -50,7 +50,7 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
                     withContext(Dispatchers.IO) {
                         val resultList = listOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
-                            GenericResultModel("suggested_filter", "Suggested Filter", "TBD"),
+                            GenericResultModel("suggested_filter", "Suggested Filter", waterSource.filter),
                         )
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {

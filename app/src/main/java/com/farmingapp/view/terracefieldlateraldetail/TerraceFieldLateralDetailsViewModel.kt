@@ -52,7 +52,9 @@ class TerraceFieldLateralDetailsViewModel @Inject constructor(
                         preferences.setDripperSpacing(action.data.dripperSpacing)
                         preferences.setLateralSpacing(action.data.lateralSpacing)
                         preferences.setTotalNumberOfDrippers("${(preferences.getArea().toDouble()/(action.data.dripperSpacing.toDouble() * action.data.lateralSpacing.toDouble())).toInt()}")
+                        preferences.setDripNumber(action.data.dripperPerPlant)
                         preferences.setDripperPerPlant(action.data.dripperPerPlant)
+                        preferences.setDripperSize(dripper.label)
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }

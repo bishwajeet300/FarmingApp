@@ -82,6 +82,9 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
                             resultList.add(GenericResultModel("INFO", "", "Your selected Lateral size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                         }
 
+                        preferences.setLateralDiameter(lateralDiameter.label)
+                        preferences.setLateralLength(action.data.lateralLengthSubMain)
+
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
                         } else {

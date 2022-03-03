@@ -67,6 +67,10 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                         )
 
                         preferences.setAverageSubMainFlowRate(String.format("%.7f", flowRateList.sum()))
+                        preferences.setNumberOfLateralSubMain(preferences.getNumberOfLateral())
+                        preferences.setNumberOfDripperForSubMain(preferences.getTotalNumberOfDrippers())
+                        preferences.setSubMainDiameter(subMainDiameter.label)
+                        preferences.setSubMainLength(String.format("%.4f", action.data.subMainLengthPerTerrace.sum()))
 
                         val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
 

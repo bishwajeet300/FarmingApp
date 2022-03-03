@@ -78,6 +78,9 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                             GenericResultModel("selected_lateral_internal_diameter", "Selected Lateral of\nInternal Diameter (mm)", lateralDiameter.internalDiameter)
                         )
 
+                        preferences.setLateralDiameter(lateralDiameter.label)
+                        preferences.setLateralLength(action.data.lateralLengthPerTerrace.sum().toString())
+
                         val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
 
                         var messageWarningFlag = false

@@ -31,9 +31,6 @@ interface PreferencesManager {
     fun getTotalNumberOfDrippers(): String
     fun setTotalNumberOfDrippers(totalNumberOfDrippers: String)
 
-    fun getDripperPerPlant(): String
-    fun setDripperPerPlant(dripperPerPlant: String)
-
     fun getDripperLateral(): String
     fun setDripperLateral(dripperLateral: String)
 
@@ -45,4 +42,47 @@ interface PreferencesManager {
 
     fun getAverageSubMainFlowRate(): String
     fun setAverageSubMainFlowRate(averageSubMainFlowRate: String)
+
+    // Output dataset
+    fun getCropName(): String
+    fun setCropName(cropName: String)
+
+    fun getSoilType(): String
+    fun setSoilType(soilType: String)
+
+    fun getPlantToPlantDistance(): String
+    fun setPlanToPlanDistance(planToPlanDistance: String)
+
+    fun getRowToRowDistance(): String
+    fun setRowToRowDistance(rowToRowDistance: String)
+
+    fun getDripperSize(): String
+    fun setDripperSize(dripperSize: String)
+
+    fun getDripperPerPlant(): String
+    fun setDripperPerPlant(dripperPerPlant: String)
+
+    fun getLateralDiameter(): String
+    fun setLateralDiameter(lateralDiameter: String)
+
+    fun getLateralLength(): String
+    fun setLateralLength(lateralLength: String)
+
+    fun getMainlineDiameter(): String
+    fun setMainlineDiameter(mainlineDiameter: String)
+
+    fun getMainlineLength(): String
+    fun setMainlineLength(mainlineLength: String)
+
+    fun getNumberOfLateralSubMain(): String
+    fun setNumberOfLateralSubMain(numberOfLateralSubMain: String)
+
+    fun getNumberOfDripperForSubMain(): String
+    fun setNumberOfDripperForSubMain(numberOfDripperForSubMain: String)
+
+    fun getSubMainDiameter(): String
+    fun setSubMainDiameter(subMainDiameter: String)
+
+    fun getSubMainLength(): String
+    fun setSubMainLength(subMainLength: String)
 }

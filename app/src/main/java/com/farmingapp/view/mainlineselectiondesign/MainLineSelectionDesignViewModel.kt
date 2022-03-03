@@ -58,6 +58,9 @@ class MainLineSelectionDesignViewModel @Inject constructor(
                         headLossFactor *= mainLineDiameter.internalDiameter.toDouble().pow(-4.871)
                         val resultList = mutableListOf<GenericResultModel>()
 
+                        preferences.setMainlineDiameter(mainLineDiameter.label)
+                        preferences.setMainlineLength(action.data.mainlineLength)
+
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             resultList.add(GenericResultModel("INFO", "", "Calculated Result"))
                             resultList.add(GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"))

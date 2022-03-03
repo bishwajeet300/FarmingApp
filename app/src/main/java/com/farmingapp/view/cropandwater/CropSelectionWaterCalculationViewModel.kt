@@ -160,6 +160,11 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                             GenericResultModel("s_wilting_point", "Wilting Point", soil.wiltingPoint.toString())
                         ))
 
+                        preferences.setCropName(crop.label)
+                        preferences.setSoilType(soil.label)
+                        preferences.setPlanToPlanDistance(action.data.plantDistance)
+                        preferences.setRowToRowDistance(action.data.rowDistance)
+
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
                         } else {

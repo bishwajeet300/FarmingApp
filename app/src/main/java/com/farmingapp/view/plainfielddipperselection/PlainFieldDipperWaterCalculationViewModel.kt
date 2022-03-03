@@ -51,6 +51,8 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
                         preferences.setLateralSpacing(action.data.lateralSpacing)
                         preferences.setDripperSpacing(action.data.dripperSpacing)
                         preferences.setDripNumber(action.data.dripperPerPlant)
+                        preferences.setDripperPerPlant(action.data.dripperPerPlant)
+                        preferences.setDripperSize(dripper.label)
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }
