@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.OutputDetailsResultModel
 import com.farmingapp.model.ResultFetchStatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ShareDetailsViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,20 +30,20 @@ class ShareDetailsViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _resultFetchStatus.value = ResultFetchStatusModel.Success(
                     data = OutputDetailsResultModel(
-                        cropName = "",
-                        soilType = "",
-                        plantDistance = "",
-                        rowDistance = "",
-                        dripperSize = "",
-                        dripperPerPlant = "",
-                        lateralDiameter = "",
-                        lateralLength = "",
-                        mainlineDiameter = "",
-                        mainlineLength = "",
-                        numberOfLateralSubMain = "",
-                        numberOfDripperForSubMain = "",
-                        subMainDiameter = "",
-                        subMainLength = ""
+                        cropName = preferences.getCropName(),
+                        soilType = preferences.getSoilType(),
+                        plantDistance = preferences.getPlantToPlantDistance(),
+                        rowDistance = preferences.getRowToRowDistance(),
+                        dripperSize = preferences.getDripperSize(),
+                        dripperPerPlant = preferences.getDripperPerPlant(),
+                        lateralDiameter = preferences.getLateralDiameter(),
+                        lateralLength = preferences.getLateralLength(),
+                        mainlineDiameter = preferences.getMainlineDiameter(),
+                        mainlineLength = preferences.getMainlineLength(),
+                        numberOfLateralSubMain = preferences.getNumberOfLateralSubMain(),
+                        numberOfDripperForSubMain = preferences.getNumberOfDripperForSubMain(),
+                        subMainDiameter = preferences.getSubMainDiameter(),
+                        subMainLength = preferences.getSubMainLength(),
                     )
                 )
             }
