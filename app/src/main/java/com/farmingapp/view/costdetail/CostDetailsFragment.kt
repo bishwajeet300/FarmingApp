@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.farmingapp.R
 import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentCostDetailsBinding
+import com.farmingapp.model.CostModel
 import com.farmingapp.model.GenericResultModel
-import com.farmingapp.model.ResultSavedStatusModel
+import com.farmingapp.model.ResultCostSavedStatusModel
 import com.farmingapp.view.helper.ResultAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -24,12 +25,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CostDetailsFragment : Fragment() {
+class CostDetailsFragment : Fragment(), OnEditClickListener {
 
     private var _binding: FragmentCostDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CostDetailsViewModel by viewModels()
+    private lateinit var bottomSheetCostEditDialog: BottomSheetDialog
     private lateinit var bottomSheetResultDialog: BottomSheetDialog
+    private lateinit var costResultAdapter: CostResultAdapter
     private lateinit var resultAdapter: ResultAdapter
 
     override fun onCreateView(
@@ -37,22 +40,29 @@ class CostDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCostDetailsBinding.inflate(inflater, container, false)
-        val view = binding.root
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.resultSavedStatus.collect { value ->
+                viewModel.resultCostSavedStatus.collect { value ->
                     when (value) {
-                        is ResultSavedStatusModel.Failure -> {
+                        is ResultCostSavedStatusModel.Failure -> {
                             enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
-                        ResultSavedStatusModel.Pending -> {
+                        ResultCostSavedStatusModel.Pending -> {
                             enableViews()
                         }
-                        is ResultSavedStatusModel.Saved -> {
+                        is ResultCostSavedStatusModel.Saved -> {
                             disableViews()
                             setupResultBottomSheet(value.resultList)
+                        }
+                        is ResultCostSavedStatusModel.InitialState -> {
+                            enableViews()
+                            setupInitialScreen(value.dataList)
                         }
                     }
                 }
@@ -60,12 +70,9 @@ class CostDetailsFragment : Fragment() {
         }
 
         setupClickListener()
-
-        return view
     }
 
     private fun setupClickListener() {
-
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -77,6 +84,12 @@ class CostDetailsFragment : Fragment() {
 
     private fun resetViews() {
         enableViews()
+    }
+
+    private fun setupInitialScreen(initialState: List<CostModel>) {
+        costResultAdapter = CostResultAdapter(initialState, this)
+        binding.rvCostResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.rvCostResult.adapter = costResultAdapter
     }
 
     private fun setupResultBottomSheet(resultList: List<GenericResultModel>) {
@@ -102,6 +115,10 @@ class CostDetailsFragment : Fragment() {
         if (bottomSheetResultDialog.isShowing.not()) {
             bottomSheetResultDialog.show()
         }
+    }
+
+    override fun onEditClick(model: CostModel) {
+
     }
 
     private fun disableViews() {

@@ -94,4 +94,10 @@
     <string name="_1">1</string>
     <string name="application_not_found">Application not found</string>
     <string name="calculated_result">Calculated Result</string>
+    <string name="calculate">Calculate</string>
+    <string name="quantity">Quantity</string>
+    <string name="amount">Amount</string>
+    <string name="rate">Rate</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
 </resources>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/HeaderValue"
+        android:text="@string/label"
+        android:textAlignment="viewStart"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivEdit"/>
+
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextValue"
+        android:text="@string/label"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivEdit"/>
+
+    <ImageView
+        android:id="@+id/ivEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_edit"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        android:contentDescription="@string/edit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvLeftLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextLabel"
+        android:layout_marginTop="16dp"
+        android:text="@string/quantity"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvLeftValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextValue"
+        android:text="@string/label"
+        android:textAlignment="center"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvLeftLabel"
+        app:layout_constraintStart_toStartOf="@+id/tvLeftLabel"
+        app:layout_constraintEnd_toEndOf="@+id/tvLeftLabel"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvMiddleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextLabel"
+        android:layout_marginTop="16dp"
+        android:text="@string/rate"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
+        app:layout_constraintStart_toEndOf="@+id/tvLeftLabel"
+        app:layout_constraintEnd_toStartOf="@+id/tvRightLabel"/>
+
+    <TextView
+        android:id="@+id/tvMiddleValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextValue"
+        android:layout_marginBottom="16dp"
+        android:text="@string/label"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/tvMiddleLabel"
+        app:layout_constraintStart_toStartOf="@+id/tvMiddleLabel"
+        app:layout_constraintEnd_toEndOf="@+id/tvMiddleLabel"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvRightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextLabel"
+        android:layout_marginTop="16dp"
+        android:text="@string/amount"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvRightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextValue"
+        android:layout_marginBottom="16dp"
+        android:text="@string/label"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/tvRightLabel"
+        app:layout_constraintStart_toStartOf="@+id/tvRightLabel"
+        app:layout_constraintEnd_toEndOf="@+id/tvRightLabel"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
