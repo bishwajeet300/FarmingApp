@@ -66,20 +66,20 @@ class ShareDetailsFragment : Fragment() {
 
     private fun getFormattedText(data: OutputDetailsResultModel): String {
         return StringBuffer()
-            .append(R.string.crop_name_hint).append(" : ").append(data.cropName).append("\n")
-            .append(R.string.soil_type_hint).append(" : ").append(data.soilType).append("\n")
-            .append(R.string.plant_to_plant_hint).append(" : ").append(data.plantDistance).append("\n")
-            .append(R.string.row_to_row_hint).append(" : ").append(data.rowDistance).append("\n")
-            .append(R.string.selected_dripper_size_hint).append(" : ").append(data.dripperSize).append("\n")
-            .append(R.string.number_of_dripper_per_plant_hint).append(" : ").append(data.dripperPerPlant).append("\n")
-            .append(R.string.selected_lateral_diameter_hint).append(" : ").append(data.lateralDiameter).append("\n")
-            .append(R.string.length_of_lateral_hint).append(" : ").append(data.lateralLength).append("\n")
-            .append(R.string.selected_mainline_diameter_hint).append(" : ").append(data.mainlineDiameter).append("\n")
-            .append(R.string.mainline_length_hint).append(" : ").append(data.mainlineLength).append("\n")
-            .append(R.string.number_of_lateral_submain_hint).append(" : ").append(data.numberOfLateralSubMain).append("\n")
-            .append(R.string.number_of_dripper_submain_hint).append(" : ").append(data.numberOfDripperForSubMain).append("\n")
-            .append(R.string.selected_submain_diameter_hint).append(" : ").append(data.subMainDiameter).append("\n")
-            .append(R.string.length_of_submain_hint).append(" : ").append(data.subMainLength)
+            .append(getString(R.string.crop_name_hint)).append(" : ").append(data.cropName).append("\n")
+            .append(getString(R.string.soil_type_hint)).append(" : ").append(data.soilType).append("\n")
+            .append(getString(R.string.plant_to_plant_hint)).append(" : ").append(data.plantDistance).append("\n")
+            .append(getString(R.string.row_to_row_hint)).append(" : ").append(data.rowDistance).append("\n")
+            .append(getString(R.string.selected_dripper_size_hint)).append(" : ").append(data.dripperSize).append("\n")
+            .append(getString(R.string.number_of_dripper_per_plant_hint)).append(" : ").append(data.dripperPerPlant).append("\n")
+            .append(getString(R.string.selected_lateral_diameter_hint)).append(" : ").append(data.lateralDiameter).append("\n")
+            .append(getString(R.string.length_of_lateral_hint)).append(" : ").append(data.lateralLength).append("\n")
+            .append(getString(R.string.selected_mainline_diameter_hint)).append(" : ").append(data.mainlineDiameter).append("\n")
+            .append(getString(R.string.mainline_length_hint)).append(" : ").append(data.mainlineLength).append("\n")
+            .append(getString(R.string.number_of_lateral_submain_hint)).append(" : ").append(data.numberOfLateralSubMain).append("\n")
+            .append(getString(R.string.number_of_dripper_submain_hint)).append(" : ").append(data.numberOfDripperForSubMain).append("\n")
+            .append(getString(R.string.selected_submain_diameter_hint)).append(" : ").append(data.subMainDiameter).append("\n")
+            .append(getString(R.string.length_of_submain_hint)).append(" : ").append(data.subMainLength)
             .toString()
     }
 
@@ -105,6 +105,9 @@ class ShareDetailsFragment : Fragment() {
         } catch (ex: ActivityNotFoundException) {
             Toast.makeText(requireContext(), R.string.application_not_found, Toast.LENGTH_LONG).show()
         }
+
+        val action = ShareDetailsFragmentDirections.actionShareDetailsFragmentToLandingFragment()
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

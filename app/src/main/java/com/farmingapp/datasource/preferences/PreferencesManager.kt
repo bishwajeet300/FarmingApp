@@ -74,6 +74,9 @@ interface PreferencesManager {
     fun getMainlineLength(): String
     fun setMainlineLength(mainlineLength: String)
 
+    fun getRateOfMain(): String
+    fun setRateOfMain(rateOfMain: String)
+
     fun getNumberOfLateralSubMain(): String
     fun setNumberOfLateralSubMain(numberOfLateralSubMain: String)
 
@@ -85,4 +88,46 @@ interface PreferencesManager {
 
     fun getSubMainLength(): String
     fun setSubMainLength(subMainLength: String)
+
+    fun getFilterType(): String
+    fun setFilterType(filterType: String)
+
+    fun getRateOfSubMain(): String
+    fun setRateOfSubMain(rateOfSubMain: String)
+
+    fun getRateOfControlValve(): String
+    fun setRateOfControlValve(rateOfControlValve: String)
+
+    fun getRateOfFlushValve(): String
+    fun setRateOfFlushValve(rateOfFlushValve: String)
+
+    fun getRateOfElbow(): String
+    fun setRateOfElbow(rateOfElbow: String)
+
+    fun getRateOfEndCapsSubMain(): String
+    fun setRateOfEndCapsSubMain(rateOfEndCapsSubMain: String)
+
+    fun getRateOfLateral(): String
+    fun setRateOfLateral(rateOfLateral: String)
+
+    fun getRateOfEndCapsLateral(): String
+    fun setRateOfEndCapsLateral(rateOfEndCapsLateral: String)
+
+    fun getRateOfEmitter(): String
+    fun setRateOfEmitter(rateOfEmitter: String)
+
+    fun getRateOfFilter(): String
+    fun setRateOfFilter(rateOfFilter: String)
+
+    fun getQuantityOfControlFlow(): String
+    fun setQuantityOfControlFlow(quantityOfControlFlow: String)
+
+    fun getQuantityOfElbow(): String
+    fun setQuantityOfElbow(quantityOfElbow: String)
+
+    fun getQuantityOfEndCapsSubMain(): String
+    fun setQuantityOfEndCapsSubMain(quantityOfEndCapsSubMain: String)
+
+    fun getQuantityOfEndCapsLateral(): String
+    fun setQuantityOfEndCapsLateral(quantityOfEndCapsLateral: String)
 }

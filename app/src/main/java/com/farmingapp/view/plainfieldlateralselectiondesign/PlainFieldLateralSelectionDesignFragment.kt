@@ -188,7 +188,7 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etLateralDiameter.isEnabled = false
         binding.etPipeMaterial.isEnabled = false
         binding.etLateralLengthSubMain.isEnabled = false

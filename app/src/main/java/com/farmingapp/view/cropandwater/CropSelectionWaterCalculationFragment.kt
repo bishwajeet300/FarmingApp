@@ -226,7 +226,7 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etCropName.isEnabled = false
         binding.etSoilType.isEnabled = false
         binding.etEPan.isEnabled = false

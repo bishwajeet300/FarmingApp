@@ -5,4 +5,5 @@ sealed class ResultCostSavedStatusModel {
     data class Failure(val message: String): ResultCostSavedStatusModel()
     object Pending: ResultCostSavedStatusModel()
     data class InitialState(val dataList: List<CostModel>): ResultCostSavedStatusModel()
+    data class Update(val dataList: List<CostModel>, val position: Int): ResultCostSavedStatusModel()
 }

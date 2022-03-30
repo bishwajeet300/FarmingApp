@@ -114,7 +114,7 @@ class FarmerDetailFragment: Fragment() {
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etFullName.isEnabled = false
         binding.etPhone.isEnabled = false
         binding.etEmail.isEnabled = false

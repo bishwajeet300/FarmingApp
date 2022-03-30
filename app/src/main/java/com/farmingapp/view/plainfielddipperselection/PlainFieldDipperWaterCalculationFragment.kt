@@ -168,7 +168,7 @@ class PlainFieldDipperWaterCalculationFragment : Fragment(), OnOptionsClickListe
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etDripper.isEnabled = false
         binding.etDripperSpacing.isEnabled = false
         binding.etLateralSpacing.isEnabled = false
@@ -245,8 +245,7 @@ class PlainFieldDipperWaterCalculationFragment : Fragment(), OnOptionsClickListe
     private fun getDripperList(): List<GenericOptionModel> {
         return listOf(
             GenericOptionModel("2", "2 lph"),
-            GenericOptionModel("4", "4 lph"),
-            GenericOptionModel("8", "8 lph")
+            GenericOptionModel("4", "4 lph")
         )
     }
 }

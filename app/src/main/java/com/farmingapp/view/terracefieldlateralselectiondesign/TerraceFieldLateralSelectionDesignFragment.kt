@@ -151,7 +151,7 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 binding.tvLateralTerraceLengths.setLines(binding.tvLateralTerraceLengths.lineCount + 1)
                 binding.tvLateralTerraceLengths.text = lateralLengthString
                 eachLateralLength.add(entry.toDouble())
-                binding.etTotalLateralLength.setText("${eachLateralLength.sum().times(binding.etLateralTerraceNumber.text.toString().toInt())}")
+                binding.etTotalLateralLength.setText("${eachLateralLength.sum().times(binding.etEachLateralTerraceLength.text.toString().toInt())}")
                 binding.etEachLateralTerraceLength.setText("")
             } else {
                 binding.etEachLateralTerraceLength.error = resources.getString(R.string.value_missing)
@@ -215,7 +215,7 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.btnAddLateralTerraceLength.isEnabled = false
         binding.etEachLateralTerraceLength.isEnabled = false
         binding.etLateralDiameter.isEnabled = false

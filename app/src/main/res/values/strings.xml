@@ -81,7 +81,7 @@
     <string name="terrace_width_helper_text">*Width range between 1 m - 3.5 m</string>
     <string name="cumulative_height_each_terrace_hint">Enter cumulative height of each Terrace (m)</string>
     <string name="terrace_height_helper_text">*Include height of tank placement</string>
-    <string name="total_height_terrace_hint">Totla Terrace Height</string>
+    <string name="total_height_terrace_hint">Total Terrace Height</string>
     <string name="length_lateral_submain_hint">Length of Lateral on one side of Sub-Main (m)</string>
     <string name="label">Label</string>
     <string name="value">Value</string>

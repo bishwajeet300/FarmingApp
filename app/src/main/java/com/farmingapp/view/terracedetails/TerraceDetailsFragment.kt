@@ -206,7 +206,7 @@ class TerraceDetailsFragment : Fragment() {
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etTotalTerraceLength.isEnabled = false
         binding.etTotalTerraceWidth.isEnabled = false
         binding.etTotalTerraceCumulativeHeight.isEnabled = false

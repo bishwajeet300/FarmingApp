@@ -12,6 +12,14 @@ class PreferencesManagerImpl @Inject constructor(
     private val preferences: SharedPreferences =
         context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
 
+    private fun setValue(key: String, value: String) {
+        preferences.edit().putString(key, value).apply()
+    }
+
+    private fun getValue(key: String): String {
+        return preferences.getString(key, "").orEmpty()
+    }
+
     override fun getCropWaterRequirement(): String {
         return getValue(CROP_WATER_REQUIREMENT)
     }
@@ -58,14 +66,6 @@ class PreferencesManagerImpl @Inject constructor(
 
     override fun setTerraceWidths(widths: String) {
         setValue(TERRACE_WIDTH, widths)
-    }
-
-    private fun setValue(key: String, value: String) {
-        preferences.edit().putString(key, value).apply()
-    }
-
-    private fun getValue(key: String): String {
-        return preferences.getString(key, "").orEmpty()
     }
 
     override fun getNumberOfLateral(): String {
@@ -145,7 +145,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setCropName(cropName: String) {
-        setValue(cropName, CROP_NAME)
+        setValue(CROP_NAME, cropName)
     }
 
     override fun getSoilType(): String {
@@ -153,7 +153,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setSoilType(soilType: String) {
-        setValue(soilType, SOIL_TYPE)
+        setValue(SOIL_TYPE, soilType)
     }
 
     override fun getPlantToPlantDistance(): String {
@@ -161,7 +161,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setPlanToPlanDistance(planToPlanDistance: String) {
-        setValue(planToPlanDistance, PLANT_DISTANCE)
+        setValue(PLANT_DISTANCE, planToPlanDistance)
     }
 
     override fun getRowToRowDistance(): String {
@@ -169,7 +169,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setRowToRowDistance(rowToRowDistance: String) {
-        setValue(rowToRowDistance, ROW_DISTANCE)
+        setValue(ROW_DISTANCE, rowToRowDistance)
     }
 
     override fun getDripperSize(): String {
@@ -177,7 +177,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setDripperSize(dripperSize: String) {
-        setValue(dripperSize, DRIPPER_SIZE)
+        setValue(DRIPPER_SIZE, dripperSize)
     }
 
     override fun getLateralDiameter(): String {
@@ -185,7 +185,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setLateralDiameter(lateralDiameter: String) {
-        setValue(lateralDiameter, LATERAL_DIAMETER)
+        setValue(LATERAL_DIAMETER, lateralDiameter)
     }
 
     override fun getLateralLength(): String {
@@ -193,7 +193,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setLateralLength(lateralLength: String) {
-        setValue(lateralLength, LATERAL_LENGTH)
+        setValue(LATERAL_LENGTH, lateralLength)
     }
 
     override fun getMainlineDiameter(): String {
@@ -201,7 +201,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setMainlineDiameter(mainlineDiameter: String) {
-        setValue(mainlineDiameter, MAINLINE_DIAMETER)
+        setValue(MAINLINE_DIAMETER, mainlineDiameter)
     }
 
     override fun getMainlineLength(): String {
@@ -209,7 +209,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setMainlineLength(mainlineLength: String) {
-        setValue(mainlineLength, MAINLINE_LENGTH)
+        setValue(MAINLINE_LENGTH, mainlineLength)
     }
 
     override fun getNumberOfLateralSubMain(): String {
@@ -217,7 +217,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setNumberOfLateralSubMain(numberOfLateralSubMain: String) {
-        setValue(numberOfLateralSubMain, NO_OF_LATERAL_SUBMAIN)
+        setValue(NO_OF_LATERAL_SUBMAIN, numberOfLateralSubMain)
     }
 
     override fun getNumberOfDripperForSubMain(): String {
@@ -225,7 +225,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setNumberOfDripperForSubMain(numberOfDripperForSubMain: String) {
-        setValue(numberOfDripperForSubMain, NO_OF_DRIPPER_FOR_SUBMAIN)
+        setValue(NO_OF_DRIPPER_FOR_SUBMAIN, numberOfDripperForSubMain)
     }
 
     override fun getSubMainDiameter(): String {
@@ -233,7 +233,7 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setSubMainDiameter(subMainDiameter: String) {
-        setValue(subMainDiameter, SUB_MAIN_DIAMETER)
+        setValue(SUB_MAIN_DIAMETER, subMainDiameter)
     }
 
     override fun getSubMainLength(): String {
@@ -241,7 +241,127 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun setSubMainLength(subMainLength: String) {
-        setValue(subMainLength, SUB_MAIN_LENGTH)
+        setValue(SUB_MAIN_LENGTH, subMainLength)
+    }
+
+    override fun getRateOfMain(): String {
+        return getValue(RATE_OF_MAIN)
+    }
+
+    override fun setRateOfMain(rateOfMain: String) {
+        setValue(RATE_OF_MAIN, rateOfMain)
+    }
+
+    override fun getFilterType(): String {
+        return getValue(FILTER_TYPE)
+    }
+
+    override fun setFilterType(filterType: String) {
+        setValue(FILTER_TYPE, filterType)
+    }
+
+    override fun getRateOfSubMain(): String {
+        return getValue(RATE_OF_SUB_MAIN)
+    }
+
+    override fun setRateOfSubMain(rateOfSubMain: String) {
+        setValue(RATE_OF_SUB_MAIN, rateOfSubMain)
+    }
+
+    override fun getRateOfControlValve(): String {
+        return getValue(RATE_OF_CONTROL_VALVE)
+    }
+
+    override fun setRateOfControlValve(rateOfControlValve: String) {
+        setValue(RATE_OF_CONTROL_VALVE, rateOfControlValve)
+    }
+
+    override fun getRateOfFlushValve(): String {
+        return getValue(RATE_OF_FLUSH_VALVE)
+    }
+
+    override fun setRateOfFlushValve(rateOfFlushValve: String) {
+        setValue(RATE_OF_FLUSH_VALVE, rateOfFlushValve)
+    }
+
+    override fun getRateOfElbow(): String {
+        return getValue(RATE_OF_ELBOW)
+    }
+
+    override fun setRateOfElbow(rateOfElbow: String) {
+        setValue(RATE_OF_ELBOW, rateOfElbow)
+    }
+
+    override fun getRateOfEndCapsSubMain(): String {
+        return getValue(RATE_OF_END_CAPS_SUB_MAIN)
+    }
+
+    override fun setRateOfEndCapsSubMain(rateOfEndCapsSubMain: String) {
+        setValue(RATE_OF_END_CAPS_SUB_MAIN, rateOfEndCapsSubMain)
+    }
+
+    override fun getRateOfLateral(): String {
+        return getValue(RATE_OF_LATERAL)
+    }
+
+    override fun setRateOfLateral(rateOfLateral: String) {
+        setValue(RATE_OF_LATERAL, rateOfLateral)
+    }
+
+    override fun getRateOfEndCapsLateral(): String {
+        return getValue(RATE_OF_END_CAPS_LATERAL)
+    }
+
+    override fun setRateOfEndCapsLateral(rateOfEndCapsLateral: String) {
+        setValue(RATE_OF_END_CAPS_LATERAL, rateOfEndCapsLateral)
+    }
+
+    override fun getRateOfEmitter(): String {
+        return getValue(RATE_OF_EMITTER)
+    }
+
+    override fun setRateOfEmitter(rateOfEmitter: String) {
+        setValue(RATE_OF_EMITTER, rateOfEmitter)
+    }
+
+    override fun getRateOfFilter(): String {
+        return getValue(RATE_OF_FILTER)
+    }
+
+    override fun setRateOfFilter(rateOfFilter: String) {
+        setValue(RATE_OF_FILTER, rateOfFilter)
+    }
+
+    override fun getQuantityOfControlFlow(): String {
+        return getValue(QUANTITY_OF_CONTROL_FLOW)
+    }
+
+    override fun setQuantityOfControlFlow(quantityOfControlFlow: String) {
+        setValue(QUANTITY_OF_CONTROL_FLOW, quantityOfControlFlow)
+    }
+
+    override fun getQuantityOfElbow(): String {
+        return getValue(QUANTITY_OF_ELBOW)
+    }
+
+    override fun setQuantityOfElbow(quantityOfElbow: String) {
+        setValue(QUANTITY_OF_ELBOW, quantityOfElbow)
+    }
+
+    override fun getQuantityOfEndCapsSubMain(): String {
+        return getValue(QUANTITY_OF_END_CAPS_SUB_MAIN)
+    }
+
+    override fun setQuantityOfEndCapsSubMain(quantityOfEndCapsSubMain: String) {
+        setValue(QUANTITY_OF_END_CAPS_SUB_MAIN, quantityOfEndCapsSubMain)
+    }
+
+    override fun getQuantityOfEndCapsLateral(): String {
+        return getValue(QUANTITY_OF_END_CAPS_LATERAL)
+    }
+
+    override fun setQuantityOfEndCapsLateral(quantityOfEndCapsLateral: String) {
+        setValue(QUANTITY_OF_END_CAPS_LATERAL, quantityOfEndCapsLateral)
     }
 
     companion object {
@@ -274,5 +394,20 @@ class PreferencesManagerImpl @Inject constructor(
         private const val NO_OF_DRIPPER_FOR_SUBMAIN = "n_o_d_f_sm"
         private const val SUB_MAIN_DIAMETER = "sub_main_diameter"
         private const val SUB_MAIN_LENGTH = "sub_main_length"
+        private const val RATE_OF_MAIN = "rate_of_main"
+        private const val FILTER_TYPE = "filter_type"
+        private const val RATE_OF_SUB_MAIN = "rate_of_sub_main"
+        private const val RATE_OF_CONTROL_VALVE = "rate_of_control_valve"
+        private const val RATE_OF_FLUSH_VALVE = "rate_of_flush_valve"
+        private const val RATE_OF_ELBOW = "rate_of_elbow"
+        private const val RATE_OF_END_CAPS_SUB_MAIN = "rate_of_end_caps_sub_main"
+        private const val RATE_OF_LATERAL = "rate_of_lateral"
+        private const val RATE_OF_END_CAPS_LATERAL = "rate_of_end_caps_lateral"
+        private const val RATE_OF_EMITTER = "rate_of_emitter"
+        private const val RATE_OF_FILTER = "rate_of_filter"
+        private const val QUANTITY_OF_CONTROL_FLOW = "quantity_of_control_flow"
+        private const val QUANTITY_OF_ELBOW = "quantity_of_elbow"
+        private const val QUANTITY_OF_END_CAPS_SUB_MAIN = "quantity_of_end_caps_sub_main"
+        private const val QUANTITY_OF_END_CAPS_LATERAL = "quantity_of_end_caps_lateral"
     }
 }

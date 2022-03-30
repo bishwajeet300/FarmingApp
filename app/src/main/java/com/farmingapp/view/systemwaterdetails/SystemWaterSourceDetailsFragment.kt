@@ -98,7 +98,7 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
         val waterTankLocationBottomSheetBinding = BottomsheetOptionsBinding.inflate(layoutInflater, null, false)
         bottomSheetWaterTankLocationDialog.setContentView(waterTankLocationBottomSheetBinding.root)
 
-        waterTankLocationAdapter = OptionsAdapter(OptionsType.WATER_SOURCE, getWaterTankLocation(), this)
+        waterTankLocationAdapter = OptionsAdapter(OptionsType.WATER_TANK_LOCATION, getWaterTankLocation(), this)
         waterTankLocationBottomSheetBinding.rvOptions.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         waterTankLocationBottomSheetBinding.rvOptions.adapter = waterTankLocationAdapter
 
@@ -183,7 +183,7 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etWaterSource.isEnabled = false
         binding.etWaterTankLocation.isEnabled = false
     }

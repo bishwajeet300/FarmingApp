@@ -6,5 +6,6 @@ data class CostModel(
     val value: String,
     val quantity: String,
     val rate: String,
-    val amount: String
+    val amount: String,
+    val isUpdatable: Boolean = false
 )

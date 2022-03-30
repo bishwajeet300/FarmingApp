@@ -4,5 +4,6 @@ data class WaterSource(
     val key: String,
     val label: String,
     val value: String,
-    val filter: String
+    val filter: String,
+    val rateOfFilter: String
 )

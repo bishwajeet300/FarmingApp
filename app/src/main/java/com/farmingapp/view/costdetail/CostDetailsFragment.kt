@@ -66,6 +66,10 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
                             enableViews()
                             setupInitialScreen(value.dataList)
                         }
+                        is ResultCostSavedStatusModel.Update -> {
+                            enableViews()
+                            setupUpdateScreen(value.dataList, value.position)
+                        }
                     }
                 }
             }
@@ -91,6 +95,10 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
 
     private fun resetViews() {
         enableViews()
+    }
+
+    private fun setupUpdateScreen(initialState: List<CostModel>, position: Int) {
+        costResultAdapter.notifyItemChanged(position)
     }
 
     private fun setupInitialScreen(initialState: List<CostModel>) {
@@ -124,7 +132,7 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
         }
     }
 
-    override fun onEditClick(model: CostModel) {
+    override fun onEditClick(model: CostModel, position: Int) {
         bottomSheetCostEditDialog = BottomSheetDialog(requireContext())
         val costBottomSheetBinding = BottomsheetCostEditingBinding.inflate(layoutInflater, null, false)
         bottomSheetCostEditDialog.setContentView(costBottomSheetBinding.root)
@@ -141,7 +149,7 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
                     quantity = costBottomSheetBinding.etQuantity.text.toString(),
                     rate = model.rate,
                     amount = costBottomSheetBinding.etAmount.text.toString()
-                )
+                ), position
             ))
 
             if (bottomSheetCostEditDialog.isShowing) {
@@ -158,8 +166,7 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
-        
+        binding.btnSubmit.isEnabled = true
     }
 
     private fun enableViews() {

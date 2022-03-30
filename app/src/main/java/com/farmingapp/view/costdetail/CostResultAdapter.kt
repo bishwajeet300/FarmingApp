@@ -2,6 +2,7 @@ package com.farmingapp.view.costdetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.farmingapp.databinding.ItemCostResultBinding
 import com.farmingapp.model.CostModel
@@ -24,7 +25,7 @@ class CostResultAdapter(
     override fun onBindViewHolder(holder: CostResultViewHolder, position: Int) {
         with(holder) {
             with(dataset[position]) {
-                bind(this)
+                bind(this, position)
             }
         }
     }
@@ -34,15 +35,20 @@ class CostResultAdapter(
     inner class CostResultViewHolder(private val binding: ItemCostResultBinding)
         :RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(model: CostModel) {
+            fun bind(model: CostModel, position: Int) {
                 binding.tvTitle.text = model.title
                 binding.tvSubtitle.text = model.value
                 binding.tvLeftValue.text = model.quantity
                 binding.tvMiddleValue.text = model.rate
                 binding.tvRightValue.text = model.amount
 
-                binding.ivEdit.setOnClickListener {
-                    editClickListener.onEditClick(model)
+                if (model.isUpdatable) {
+                    binding.ivEdit.isVisible = true
+                    binding.ivEdit.setOnClickListener {
+                        editClickListener.onEditClick(model, position)
+                    }
+                } else {
+                    binding.ivEdit.isVisible = false
                 }
             }
         }

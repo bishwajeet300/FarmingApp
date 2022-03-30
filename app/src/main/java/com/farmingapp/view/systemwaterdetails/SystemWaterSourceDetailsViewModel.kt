@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
+import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
 import com.farmingapp.view.mainlineselectiondesign.MainLineSelectionDesignViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SystemWaterSourceDetailsViewModel @Inject constructor(
     private val databaseService: DatabaseService,
+    private val preferences: PreferencesManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,11 +32,11 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
 
     companion object {
         val waterSourceList = listOf(
-            WaterSource(key = "spring", label = "Spring", value = "spring", filter = "Screen Filter"),
-            WaterSource(key = "river_nala", label = "River/Nala", value = "river_nala", filter = "Screen & Disk Filter"),
-            WaterSource(key = "tube_well", label = "Tube Well", value = "tube_well", filter = "Screen Filter"),
-            WaterSource(key = "pond_lake", label = "Pond/Lake", value = "pond_lake", filter = "Screen Filter"),
-            WaterSource(key = "open_well", label = "Open Well", value = "open_well", filter = "Screen & Disk Filter"),
+            WaterSource(key = "spring", label = "Spring", value = "spring", filter = "Screen Filter", rateOfFilter = "3500"),
+            WaterSource(key = "river_nala", label = "River/Nala", value = "river_nala", filter = "Screen & Disk Filter", rateOfFilter = "7000"),
+            WaterSource(key = "tube_well", label = "Tube Well", value = "tube_well", filter = "Screen Filter", rateOfFilter = "3500"),
+            WaterSource(key = "pond_lake", label = "Pond/Lake", value = "pond_lake", filter = "Screen Filter", rateOfFilter = "3500"),
+            WaterSource(key = "open_well", label = "Open Well", value = "open_well", filter = "Screen & Disk Filter", rateOfFilter = "7000"),
         )
 
         val waterTankLocationList = listOf(
@@ -52,6 +54,8 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("suggested_filter", "Suggested Filter", waterSource.filter),
                         )
+                        preferences.setFilterType(waterSource.filter)
+                        preferences.setRateOfFilter(waterSource.rateOfFilter)
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)

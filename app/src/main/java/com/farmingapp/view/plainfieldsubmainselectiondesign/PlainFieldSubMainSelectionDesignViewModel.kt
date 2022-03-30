@@ -32,11 +32,11 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val subMainDiameterList = listOf(
-            SubMainDiameter(key = "32", label = "32 mm", value = "32", subMainDiameter = "28.7"),
-            SubMainDiameter(key = "40", label = "40 mm", value = "40", subMainDiameter = "36.7"),
-            SubMainDiameter(key = "50", label = "50 mm", value = "50", subMainDiameter = "45.8"),
-            SubMainDiameter(key = "63", label = "63 mm", value = "63", subMainDiameter = "58"),
-            SubMainDiameter(key = "75", label = "75 mm", value = "75", subMainDiameter = "69")
+            SubMainDiameter(key = "32", label = "32 mm", value = "32", subMainDiameter = "28.7", rateOfSubMain = "45", rateOfControlValve = "500", rateOfFlushValve = "120", rateOfElbow = "50", rateOfEndCapsSubMain = "20"),
+            SubMainDiameter(key = "40", label = "40 mm", value = "40", subMainDiameter = "36.7", rateOfSubMain = "55", rateOfControlValve = "515", rateOfFlushValve = "130", rateOfElbow = "60", rateOfEndCapsSubMain = "25"),
+            SubMainDiameter(key = "50", label = "50 mm", value = "50", subMainDiameter = "45.8", rateOfSubMain = "60", rateOfControlValve = "554", rateOfFlushValve = "140", rateOfElbow = "70", rateOfEndCapsSubMain = "28"),
+            SubMainDiameter(key = "63", label = "63 mm", value = "63", subMainDiameter = "58", rateOfSubMain = "70", rateOfControlValve = "560", rateOfFlushValve = "150", rateOfElbow = "80", rateOfEndCapsSubMain = "30"),
+            SubMainDiameter(key = "75", label = "75 mm", value = "75", subMainDiameter = "69", rateOfSubMain = "75", rateOfControlValve = "580", rateOfFlushValve = "160", rateOfElbow = "90", rateOfEndCapsSubMain = "35")
         )
     }
 
@@ -66,6 +66,15 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
                         preferences.setNumberOfDripperForSubMain(String.format("%.4f", action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble()).times(2)))
                         preferences.setSubMainDiameter(subMainDiameter.label)
                         preferences.setSubMainLength(action.data.subMainLength)
+                        preferences.setRateOfSubMain(subMainDiameter.rateOfSubMain)
+                        preferences.setRateOfControlValve(subMainDiameter.rateOfControlValve)
+                        preferences.setRateOfFlushValve(subMainDiameter.rateOfFlushValve)
+                        preferences.setRateOfElbow(subMainDiameter.rateOfElbow)
+                        preferences.setRateOfEndCapsSubMain(subMainDiameter.rateOfEndCapsSubMain)
+                        preferences.setQuantityOfControlFlow("1")
+                        preferences.setQuantityOfElbow("1")
+                        preferences.setQuantityOfEndCapsSubMain("2")
+                        preferences.setQuantityOfEndCapsLateral(String.format("%.4f", action.data.subMainLength.toDouble().div(preferences.getLateralSpacing().toDouble()).times(2)))
 
                         if (headLossFactor > 2) {
                             resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is wrong. The calculated Head Loss is not sufficient to carry the flow. Change the Diameter"))

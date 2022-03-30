@@ -8,7 +8,6 @@ import com.farmingapp.datasource.DatabaseService
 import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
-import com.farmingapp.view.plainfieldsubmainselectiondesign.PlainFieldSubMainSelectionDesignViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,13 +30,22 @@ class MainLineSelectionDesignViewModel @Inject constructor(
     private lateinit var mainLineDiameter: MainLineDiameter
 
     companion object {
-        val mainLineDiameterList = listOf(
-            MainLineDiameter(key = "40", label = "40 mm", value = "40", internalDiameter = "36.6"),
-            MainLineDiameter(key = "50", label = "50 mm", value = "50", internalDiameter = "45.8"),
-            MainLineDiameter(key = "63", label = "63 mm", value = "63", internalDiameter = "58"),
-            MainLineDiameter(key = "75", label = "75 mm", value = "75", internalDiameter = "69"),
-            MainLineDiameter(key = "90", label = "90 mm", value = "90", internalDiameter = "82.8"),
-            MainLineDiameter(key = "110", label = "110 mm", value = "110", internalDiameter = "101.3"),
+        val mainLineTerraceDiameterList = listOf(
+            MainLineDiameter(key = "40", label = "40 mm", value = "40", internalDiameter = "36.7", rateOfMain = "55"),
+            MainLineDiameter(key = "50", label = "50 mm", value = "50", internalDiameter = "45.8", rateOfMain = "60"),
+            MainLineDiameter(key = "63", label = "63 mm", value = "63", internalDiameter = "58", rateOfMain = "65"),
+            MainLineDiameter(key = "75", label = "75 mm", value = "75", internalDiameter = "69", rateOfMain = "70"),
+            MainLineDiameter(key = "90", label = "90 mm", value = "90", internalDiameter = "82.8", rateOfMain = "80"),
+            MainLineDiameter(key = "110", label = "110 mm", value = "110", internalDiameter = "101.3", rateOfMain = "85")
+        )
+
+        val mainLinePlainDiameterList = listOf(
+            MainLineDiameter(key = "40", label = "40 mm", value = "40", internalDiameter = "36.6", rateOfMain = "55"),
+            MainLineDiameter(key = "50", label = "50 mm", value = "50", internalDiameter = "45.8", rateOfMain = "60"),
+            MainLineDiameter(key = "63", label = "63 mm", value = "63", internalDiameter = "58", rateOfMain = "65"),
+            MainLineDiameter(key = "75", label = "75 mm", value = "75", internalDiameter = "69", rateOfMain = "70"),
+            MainLineDiameter(key = "90", label = "90 mm", value = "90", internalDiameter = "82.8", rateOfMain = "75"),
+            MainLineDiameter(key = "110", label = "110 mm", value = "110", internalDiameter = "101.3", rateOfMain = "80")
         )
     }
 
@@ -60,6 +68,7 @@ class MainLineSelectionDesignViewModel @Inject constructor(
 
                         preferences.setMainlineDiameter(mainLineDiameter.label)
                         preferences.setMainlineLength(action.data.mainlineLength)
+                        preferences.setRateOfMain(mainLineDiameter.rateOfMain)
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             resultList.add(GenericResultModel("INFO", "", "Calculated Result"))
@@ -90,8 +99,18 @@ class MainLineSelectionDesignViewModel @Inject constructor(
                 }
             }
             is MainLineSelectionDesignAction.SaveOption -> {
-                if (action.type == OptionsType.MAIN_DIAMETER) {
-                    mainLineDiameter = mainLineDiameterList.first { it.key == action.data.key }
+                viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        if (action.type == OptionsType.MAIN_DIAMETER) {
+                            mainLineDiameter = if (databaseService.farmerDetailDAO()
+                                    .getFarmer().field == FieldDesign.PLAIN.name
+                            ) {
+                                mainLinePlainDiameterList.first { it.key == action.data.key }
+                            } else {
+                                mainLineTerraceDiameterList.first { it.key == action.data.key }
+                            }
+                        }
+                    }
                 }
             }
         }

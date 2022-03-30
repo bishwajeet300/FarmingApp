@@ -133,6 +133,7 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 binding.tvSubMainTerraceLengths.text = subMainLengthString
                 eachSubMainLength.add(entry.toDouble())
                 binding.etTotalSubMainLength.setText("${eachSubMainLength.sum()}")
+                binding.etEachSubMainTerraceLength.setText("")
             } else {
                 binding.etEachSubMainTerraceLength.error = resources.getString(R.string.value_missing)
             }
@@ -187,7 +188,7 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.btnAddSubMainTerraceLength.isEnabled = false
         binding.etSubMainDiameter.isEnabled = false
         binding.etEachSubMainTerraceLength.isEnabled = false

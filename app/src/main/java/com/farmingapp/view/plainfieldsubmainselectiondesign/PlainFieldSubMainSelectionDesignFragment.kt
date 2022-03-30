@@ -161,7 +161,7 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListe
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etSubMainDiameter.isEnabled = false
         binding.etLengthSubMain.isEnabled = false
     }

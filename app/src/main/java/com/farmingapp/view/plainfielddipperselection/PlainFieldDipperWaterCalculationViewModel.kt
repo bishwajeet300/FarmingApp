@@ -29,9 +29,8 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
 
     companion object {
         val dripperList = listOf(
-            DripperModel(key = "2", label = "2 lph", value = "2", innerDiameter = "1.6"),
-            DripperModel(key = "4", label = "4 lph", value = "4", innerDiameter = "3.0"),
-            DripperModel(key = "8", label = "8 lph", value = "8", innerDiameter = "6.0")
+            DripperModel(key = "2", label = "2 lph", value = "2", innerDiameter = "1.6", rateOfEmitter = "3.5"),
+            DripperModel(key = "4", label = "4 lph", value = "4", innerDiameter = "3.0", rateOfEmitter = "5"),
         )
     }
 
@@ -40,6 +39,8 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
             is PlainFieldDipperWaterCalculationAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
+                        val totalNumberOfDrippers = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(preferences.getLateralSpacing().toDouble() * preferences.getDripperSpacing().toDouble()))
+
                         val resultList = listOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel(key = "crop_water_requirement", label = "Crop Water Requirement (l/day/plant)", value = preferences.getCropWaterRequirement()),
@@ -48,11 +49,14 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
                             GenericResultModel(key = "total_dripper", label = "Total No. of Dripper", value = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(preferences.getLateralSpacing().toDouble() * preferences.getDripperSpacing().toDouble()))),
                             GenericResultModel(key = "irrigation_time", label = "Irrigation Time (hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble()))
                         )
+                        preferences.setDripperInternalDiameter(dripper.innerDiameter)
                         preferences.setLateralSpacing(action.data.lateralSpacing)
                         preferences.setDripperSpacing(action.data.dripperSpacing)
+                        preferences.setTotalNumberOfDrippers(totalNumberOfDrippers)
                         preferences.setDripNumber(action.data.dripperPerPlant)
                         preferences.setDripperPerPlant(action.data.dripperPerPlant)
                         preferences.setDripperSize(dripper.label)
+                        preferences.setRateOfEmitter(dripper.rateOfEmitter)
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }

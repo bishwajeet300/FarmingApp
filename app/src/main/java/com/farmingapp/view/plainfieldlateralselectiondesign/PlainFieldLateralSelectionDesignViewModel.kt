@@ -32,9 +32,8 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
 
     companion object {
         val lateralDiameterList = listOf(
-            LateralDiameter(key = "12", label = "12 mm", value = "12", internalDiameter = "9.6"),
-            LateralDiameter(key = "16", label = "16 mm", value = "16", internalDiameter = "12.7"),
-            LateralDiameter(key = "20", label = "20 mm", value = "20", internalDiameter = "16.5")
+            LateralDiameter(key = "12", label = "12 mm", value = "12", internalDiameter = "9.6", rateOfLateral = "18", rateOfEndCapsLateral = "5"),
+            LateralDiameter(key = "16", label = "16 mm", value = "16", internalDiameter = "12.7", rateOfLateral = "21", rateOfEndCapsLateral = "8"),
         )
 
         val pipeMaterialList = listOf(
@@ -84,6 +83,8 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
 
                         preferences.setLateralDiameter(lateralDiameter.label)
                         preferences.setLateralLength(action.data.lateralLengthSubMain)
+                        preferences.setRateOfLateral(lateralDiameter.rateOfLateral)
+                        preferences.setRateOfEndCapsLateral(lateralDiameter.rateOfEndCapsLateral)
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)

@@ -137,7 +137,7 @@ class MainLineSelectionDesignFragment : Fragment(), OnOptionsClickListener {
     }
 
     override fun onOptionsClick(type: OptionsType, model: GenericOptionModel) {
-        if (type == OptionsType.SUB_MAIN_DIAMETER) {
+        if (type == OptionsType.MAIN_DIAMETER) {
             binding.etMainlineDiameter.setText(model.label)
             if (bottomSheetMainLineDiameterDialog.isShowing) {
                 bottomSheetMainLineDiameterDialog.dismiss()
@@ -160,7 +160,7 @@ class MainLineSelectionDesignFragment : Fragment(), OnOptionsClickListener {
     private fun disableViews() {
         binding.btnBack.isEnabled = false
         binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = false
+        binding.btnSubmit.isEnabled = true
         binding.etMainlineDiameter.isEnabled = false
         binding.etMainlineLength.isEnabled = false
     }
