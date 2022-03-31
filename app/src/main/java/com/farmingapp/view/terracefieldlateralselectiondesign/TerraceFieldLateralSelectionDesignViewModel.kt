@@ -44,7 +44,7 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
             PipeMaterial(key = "cast_iron", label = "Cast Iron", "130"),
             PipeMaterial(key = "concrete", label = "Concrete", "120"),
             PipeMaterial(key = "galvanised_iron", label = "Galvanised Iron", "120"),
-            PipeMaterial(key = "pvc", label = "PVC", "150"),
+            PipeMaterial(key = "hdpe", label = "HDPE", "150"),
             PipeMaterial(key = "smooth_pipes", label = "Smooth Pipes", "140"),
             PipeMaterial(key = "steel", label = "Steel", "145"),
             PipeMaterial(key = "wrought_iron", label = "Wrought Iron", "100")
@@ -162,6 +162,8 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                                     )
                                 )
                             }
+
+                            resultList.add(GenericResultModel("ACTION", "", ""))
 
                             preferences.setNumberOfLateral(action.data.lateralPerTerrace)
                             preferences.setLateralFlowRate(lateralFlowRate)

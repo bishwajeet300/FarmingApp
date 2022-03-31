@@ -53,6 +53,7 @@ class SystemWaterSourceDetailsViewModel @Inject constructor(
                         val resultList = listOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("suggested_filter", "Suggested Filter", waterSource.filter),
+                            GenericResultModel("ACTION", "", "")
                         )
                         preferences.setFilterType(waterSource.filter)
                         preferences.setRateOfFilter(waterSource.rateOfFilter)

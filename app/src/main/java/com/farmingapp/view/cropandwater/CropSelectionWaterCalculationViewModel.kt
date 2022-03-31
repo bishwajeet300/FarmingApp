@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
-import com.farmingapp.datasource.entity.CropSelectionWaterCalculationEntity
 import com.farmingapp.datasource.preferences.PreferencesManager
 import com.farmingapp.model.*
 import com.farmingapp.view.landing.FieldDesign
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.math.roundToLong
 
 @HiltViewModel
 class CropSelectionWaterCalculationViewModel @Inject constructor(
@@ -91,20 +89,7 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
             is CropSelectionWaterCalculationAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        databaseService.cropSelectionWaterCalculationDAO().insertDetail(
-                            CropSelectionWaterCalculationEntity(
-                                id = 1,
-                                crop_name = crop.key,
-                                soil_type = soil.key,
-                                plant_distance = action.data.plantDistance,
-                                row_distance = action.data.rowDistance,
-                                plant_shadow_area = action.data.plantShadowArea,
-                                e_pan = ePan.key,
-                                wetted_area = action.data.wettedArea
-                            )
-                        )
                         // Do calculation and push result model
-
                         val resultList = mutableListOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("crop_factor", "Crop Factor", crop.coefficient.toString()),
@@ -159,6 +144,8 @@ class CropSelectionWaterCalculationViewModel @Inject constructor(
                             GenericResultModel("s_capacity", "Field Capacity", soil.capacity.toString()),
                             GenericResultModel("s_wilting_point", "Wilting Point", soil.wiltingPoint.toString())
                         ))
+
+                        resultList.add(GenericResultModel("ACTION", "", ""))
 
                         preferences.setCropName(crop.label)
                         preferences.setSoilType(soil.label)

@@ -43,6 +43,7 @@ class CostDetailsViewModel @Inject constructor(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("filter_accessories", "Filter & Accessories @ 10%", String.format("%.2f", filterPercentage)),
                             GenericResultModel("total_amount", "Total Amount", String.format("%.2f", totalAmount)),
+                            GenericResultModel("ACTION", "", "")
                         )
 
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {

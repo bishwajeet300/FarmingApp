@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.farmingapp.R
 import com.farmingapp.databinding.FragmentShareDetailsBinding
+import com.farmingapp.model.DataFetchStatusModel
 import com.farmingapp.model.OutputDetailsResultModel
 import com.farmingapp.model.ResultFetchStatusModel
 import com.google.android.material.snackbar.Snackbar
@@ -58,6 +59,23 @@ class ShareDetailsFragment : Fragment() {
                         }
                     }
                 }
+
+                viewModel.dataFetchStatus.collect { value ->
+                    when (value) {
+                        is DataFetchStatusModel.Failure -> {
+                            Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
+                        }
+                        DataFetchStatusModel.Pending -> {
+
+                        }
+                        is DataFetchStatusModel.Success -> {
+                            binding.etName.setText(value.data.name)
+                            binding.etAddress.setText(value.data.address)
+                            binding.etPhoneNumber.setText(value.data.phone)
+                            binding.etEMail.setText(value.data.email)
+                        }
+                    }
+                }
             }
         }
 
@@ -94,7 +112,8 @@ class ShareDetailsFragment : Fragment() {
     }
 
     private fun composeEmail(addresses: Array<String>, emailText: String) {
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
             data = Uri.parse("mailto:") // only email apps should handle this
             putExtra(Intent.EXTRA_EMAIL, addresses)
             putExtra(Intent.EXTRA_SUBJECT, "Decision Support System for Design & Planning of Drip Irrigation System for Hilly Regions")

@@ -17,6 +17,7 @@ import com.farmingapp.databinding.BottomsheetOptionsBinding
 import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentPlainFieldLateralSelectionDesignBinding
 import com.farmingapp.model.*
+import com.farmingapp.view.helper.OnNextListener
 import com.farmingapp.view.helper.OnOptionsClickListener
 import com.farmingapp.view.helper.OptionsAdapter
 import com.farmingapp.view.helper.ResultAdapter
@@ -113,20 +114,20 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
 
-        resultAdapter = ResultAdapter(resultList)
+        resultAdapter = ResultAdapter(resultList, object : OnNextListener {
+            override fun next() {
+                if (bottomSheetResultDialog.isShowing) {
+                    bottomSheetResultDialog.setCancelable(true)
+                    bottomSheetResultDialog.dismiss()
+                    enableViews()
+                }
+
+                val action = PlainFieldLateralSelectionDesignFragmentDirections.actionPlainFieldLateralSelectionDesignFragmentToPlainFieldSubMainSelectionDesignFragment()
+                findNavController().navigate(action)
+            }
+        })
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         resultBottomSheetBinding.rvResult.adapter = resultAdapter
-
-        resultBottomSheetBinding.btnNext.setOnClickListener {
-            if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.setCancelable(true)
-                bottomSheetResultDialog.dismiss()
-                enableViews()
-            }
-
-            val action = PlainFieldLateralSelectionDesignFragmentDirections.actionPlainFieldLateralSelectionDesignFragmentToPlainFieldSubMainSelectionDesignFragment()
-            findNavController().navigate(action)
-        }
 
         if (bottomSheetResultDialog.isShowing.not()) {
             bottomSheetResultDialog.show()
@@ -250,7 +251,7 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
             GenericOptionModel(key = "cast_iron", label = "Cast Iron"),
             GenericOptionModel(key = "concrete", label = "Concrete"),
             GenericOptionModel(key = "galvanised_iron", label = "Galvanised Iron"),
-            GenericOptionModel(key = "pvc", label = "PVC"),
+            GenericOptionModel(key = "hdpe", label = "HDPE"),
             GenericOptionModel(key = "smooth_pipes", label = "Smooth Pipes"),
             GenericOptionModel(key = "steel", label = "Steel"),
             GenericOptionModel(key = "wrought_iron", label = "Wrought Iron")

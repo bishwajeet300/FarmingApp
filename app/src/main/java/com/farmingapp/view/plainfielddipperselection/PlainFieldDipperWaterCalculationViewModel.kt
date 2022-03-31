@@ -39,15 +39,16 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
             is PlainFieldDipperWaterCalculationAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val totalNumberOfDrippers = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(preferences.getLateralSpacing().toDouble() * preferences.getDripperSpacing().toDouble()))
+                        val totalNumberOfDrippers = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(action.data.lateralSpacing.toDouble() * action.data.dripperSpacing.toDouble()))
 
                         val resultList = listOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel(key = "crop_water_requirement", label = "Crop Water Requirement (l/day/plant)", value = preferences.getCropWaterRequirement()),
                             GenericResultModel(key = "total_area_of_field", label = "Area (m2)", value = "${action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()}"),
                             GenericResultModel(key = "internal_diameter_drip_selected", label = "Internal diameter of Drip Selected (lph)", value = dripper.innerDiameter),
-                            GenericResultModel(key = "total_dripper", label = "Total No. of Dripper", value = String.format("%.2f", (action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()).div(preferences.getLateralSpacing().toDouble() * preferences.getDripperSpacing().toDouble()))),
-                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time (hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble()))
+                            GenericResultModel(key = "total_dripper", label = "Total No. of Dripper", value = totalNumberOfDrippers),
+                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time (hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble())),
+                            GenericResultModel("ACTION", "", "")
                         )
                         preferences.setDripperInternalDiameter(dripper.innerDiameter)
                         preferences.setLateralSpacing(action.data.lateralSpacing)
@@ -57,6 +58,7 @@ class PlainFieldDipperWaterCalculationViewModel @Inject constructor(
                         preferences.setDripperPerPlant(action.data.dripperPerPlant)
                         preferences.setDripperSize(dripper.label)
                         preferences.setRateOfEmitter(dripper.rateOfEmitter)
+                        preferences.setArea("${action.data.fieldLength.toDouble() * action.data.fieldWidth.toDouble()}")
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, true)
                     }

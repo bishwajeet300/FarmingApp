@@ -82,6 +82,8 @@ class PlainFieldSubMainSelectionDesignViewModel @Inject constructor(
                             resultList.add(GenericResultModel("INFO", "", "Your selected Sub-Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                         }
 
+                        resultList.add(GenericResultModel("ACTION", "", ""))
+
                         if (databaseService.farmerDetailDAO().getFarmer().field == FieldDesign.PLAIN.name) {
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
                         } else {

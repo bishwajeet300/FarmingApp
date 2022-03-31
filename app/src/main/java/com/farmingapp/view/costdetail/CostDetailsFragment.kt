@@ -19,6 +19,7 @@ import com.farmingapp.model.CostDetailAction
 import com.farmingapp.model.CostModel
 import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultCostSavedStatusModel
+import com.farmingapp.view.helper.OnNextListener
 import com.farmingapp.view.helper.ResultAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -68,7 +69,7 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
                         }
                         is ResultCostSavedStatusModel.Update -> {
                             enableViews()
-                            setupUpdateScreen(value.dataList, value.position)
+                            setupUpdateScreen(value.position)
                         }
                     }
                 }
@@ -97,7 +98,7 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
         enableViews()
     }
 
-    private fun setupUpdateScreen(initialState: List<CostModel>, position: Int) {
+    private fun setupUpdateScreen(position: Int) {
         costResultAdapter.notifyItemChanged(position)
     }
 
@@ -112,20 +113,20 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
 
-        resultAdapter = ResultAdapter(resultList)
+        resultAdapter = ResultAdapter(resultList, object : OnNextListener {
+            override fun next() {
+                if (bottomSheetResultDialog.isShowing) {
+                    bottomSheetResultDialog.setCancelable(true)
+                    bottomSheetResultDialog.dismiss()
+                    enableViews()
+                }
+
+                val action = CostDetailsFragmentDirections.actionCostDetailsFragment2ToShareDetailsFragment()
+                findNavController().navigate(action)
+            }
+        })
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         resultBottomSheetBinding.rvResult.adapter = resultAdapter
-
-        resultBottomSheetBinding.btnNext.setOnClickListener {
-            if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.setCancelable(true)
-                bottomSheetResultDialog.dismiss()
-                enableViews()
-            }
-
-            val action = CostDetailsFragmentDirections.actionCostDetailsFragment2ToShareDetailsFragment()
-            findNavController().navigate(action)
-        }
 
         if (bottomSheetResultDialog.isShowing.not()) {
             bottomSheetResultDialog.show()

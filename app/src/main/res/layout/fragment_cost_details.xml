@@ -19,7 +19,7 @@
         android:textAlignment="center"
         android:textColor="@color/secondaryLightColor"
         android:textSize="16sp"
-            android:maxLines="2"
+        android:maxLines="2"
         app:layout_constraintBottom_toBottomOf="@+id/divider"
         app:layout_constraintEnd_toStartOf="@+id/btnReset"
         app:layout_constraintStart_toEndOf="@+id/btnBack"

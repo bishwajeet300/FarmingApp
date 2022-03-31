@@ -18,6 +18,7 @@ import com.farmingapp.model.GenericResultModel
 import com.farmingapp.model.ResultSavedStatusModel
 import com.farmingapp.model.TerraceDetailUserModel
 import com.farmingapp.model.UserAction
+import com.farmingapp.view.helper.OnNextListener
 import com.farmingapp.view.helper.ResultAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -81,20 +82,20 @@ class TerraceDetailsFragment : Fragment() {
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
 
-        resultAdapter = ResultAdapter(resultList)
+        resultAdapter = ResultAdapter(resultList, object : OnNextListener {
+            override fun next() {
+                if (bottomSheetResultDialog.isShowing) {
+                    bottomSheetResultDialog.setCancelable(true)
+                    bottomSheetResultDialog.dismiss()
+                    enableViews()
+                }
+
+                val action = TerraceDetailsFragmentDirections.actionTerraceDetailsFragmentToTerraceFieldLateralDetailsFragment()
+                findNavController().navigate(action)
+            }
+        })
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         resultBottomSheetBinding.rvResult.adapter = resultAdapter
-
-        resultBottomSheetBinding.btnNext.setOnClickListener {
-            if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.setCancelable(true)
-                bottomSheetResultDialog.dismiss()
-                enableViews()
-            }
-
-            val action = TerraceDetailsFragmentDirections.actionTerraceDetailsFragmentToTerraceFieldLateralDetailsFragment()
-            findNavController().navigate(action)
-        }
 
         if (bottomSheetResultDialog.isShowing.not()) {
             bottomSheetResultDialog.show()

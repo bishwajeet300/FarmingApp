@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.farmingapp.datasource.DatabaseService
 import com.farmingapp.datasource.preferences.PreferencesManager
+import com.farmingapp.model.DataFetchStatusModel
+import com.farmingapp.model.FarmerDetailUserModel
 import com.farmingapp.model.OutputDetailsResultModel
 import com.farmingapp.model.ResultFetchStatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +27,13 @@ class ShareDetailsViewModel @Inject constructor(
     private val _resultFetchStatus = MutableStateFlow<ResultFetchStatusModel>(ResultFetchStatusModel.Pending)
     val resultFetchStatus: StateFlow<ResultFetchStatusModel> = _resultFetchStatus
 
+    private val _dataFetchStatus = MutableStateFlow<DataFetchStatusModel>(DataFetchStatusModel.Pending)
+    val dataFetchStatus: StateFlow<DataFetchStatusModel> = _dataFetchStatus
+
+    init {
+        fetchData()
+    }
+
     fun receiveUserAction() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -44,6 +53,24 @@ class ShareDetailsViewModel @Inject constructor(
                         numberOfDripperForSubMain = preferences.getNumberOfDripperForSubMain(),
                         subMainDiameter = preferences.getSubMainDiameter(),
                         subMainLength = preferences.getSubMainLength(),
+                    )
+                )
+            }
+        }
+    }
+
+    private fun fetchData() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val farmer = databaseService.farmerDetailDAO().getFarmer()
+
+                _dataFetchStatus.value = DataFetchStatusModel.Success(
+                    data = FarmerDetailUserModel(
+                        name = farmer.full_name,
+                        phone = farmer.phone,
+                        email = farmer.email,
+                        address = farmer.address,
+                        field = farmer.field
                     )
                 )
             }

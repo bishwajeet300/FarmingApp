@@ -45,6 +45,7 @@ class TerraceDetailsViewModel @Inject constructor(
                             GenericResultModel("total_area_of_field", "Total area of field (m2)", String.format("%.2f", areaList.sum())),
                             GenericResultModel("pressure_available", "Pressure Available (kg/cm2)", TransformationUtil().transformListToString(pressureList)),
                             GenericResultModel("total_pressure", "Total Pressure (kg/cm2)", String.format("%.2f", pressureList.sum())),
+                            GenericResultModel("ACTION", "", "")
                         )
                         preferences.setArea("${areaList.sum()}")
                         preferences.setTerraceWidths(TransformationUtil().transformListToString(action.data.eachTerraceWidth))

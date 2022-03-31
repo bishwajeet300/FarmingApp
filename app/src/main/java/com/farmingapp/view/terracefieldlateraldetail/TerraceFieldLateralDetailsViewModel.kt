@@ -46,7 +46,8 @@ class TerraceFieldLateralDetailsViewModel @Inject constructor(
                             GenericResultModel(key = "area", label = "Area (m2)", value = preferences.getArea()),
                             GenericResultModel(key = "drip_selected", label = "Drip Selected(lph) (Inner Diameter)", value = dripper.innerDiameter),
                             GenericResultModel(key = "total_no_dripper", label = "Total No. of Dripper", value = "$totalNumberOfDrippers"),
-                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time(hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble()))
+                            GenericResultModel(key = "irrigation_time", label = "Irrigation Time(hr)", value = String.format("%.2f", preferences.getCropWaterRequirement().toDouble()/dripper.innerDiameter.toDouble())),
+                            GenericResultModel("ACTION", "", "")
                         )
                         preferences.setDripperInternalDiameter(dripper.innerDiameter)
                         preferences.setDripperSpacing(action.data.dripperSpacing)

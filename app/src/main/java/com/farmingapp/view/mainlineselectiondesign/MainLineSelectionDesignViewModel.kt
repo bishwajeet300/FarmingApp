@@ -81,6 +81,8 @@ class MainLineSelectionDesignViewModel @Inject constructor(
                             } else {
                                 resultList.add(GenericResultModel("INFO", "", "Your selected Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                             }
+                            resultList.add(GenericResultModel("ACTION", "", ""))
+
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList, isTerraceField = false)
                         } else {
                             resultList.add(GenericResultModel("INFO", "", "Calculated Result"))
@@ -93,6 +95,8 @@ class MainLineSelectionDesignViewModel @Inject constructor(
                             } else {
                                 resultList.add(GenericResultModel("INFO", "", "Your selected Main size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                             }
+                            resultList.add(GenericResultModel("ACTION", "", ""))
+
                             _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList)
                         }
                     }

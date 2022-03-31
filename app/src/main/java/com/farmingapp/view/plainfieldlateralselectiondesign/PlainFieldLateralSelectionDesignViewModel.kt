@@ -42,7 +42,7 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
             PipeMaterial(key = "cast_iron", label = "Cast Iron", "130"),
             PipeMaterial(key = "concrete", label = "Concrete", "120"),
             PipeMaterial(key = "galvanised_iron", label = "Galvanised Iron", "120"),
-            PipeMaterial(key = "pvc", label = "PVC", "150"),
+            PipeMaterial(key = "hdpe", label = "HDPE", "150"),
             PipeMaterial(key = "smooth_pipes", label = "Smooth Pipes", "140"),
             PipeMaterial(key = "steel", label = "Steel", "145"),
             PipeMaterial(key = "wrought_iron", label = "Wrought Iron", "100"),
@@ -54,7 +54,7 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
             is PlainFieldLateralSelectionDesignAction.Submit -> {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
-                        val dripperLateral = action.data.lateralLengthSubMain.toDouble().div(preferences.getDripperSpacing().toDouble())
+                        val dripperLateral = action.data.lateralLengthSubMain.toDouble().div(preferences.getDripperSpacing().toDouble()).toInt()
                         val frl = dripperLateral.times(lateralDiameter.internalDiameter.toDouble()).div(3600)
                         val base = 10.0
                         var headLossFactor = 1.21 * base.pow(10) * action.data.lateralLengthSubMain.toDouble() * 0.35 * lateralDiameter.internalDiameter.toDouble().pow(-4.871)
@@ -66,7 +66,7 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
                         val resultList = mutableListOf(
                             GenericResultModel("INFO", "", "Calculated Result"),
                             GenericResultModel("flow_rate_lateral", "Flow rate of each Lateral", String.format("%.4f", frl)),
-                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral", String.format("%.4f", dripperLateral)),
+                            GenericResultModel("total_dripper_per_lateral", "Total No. of Dripper/Lateral", "$dripperLateral"),
                             GenericResultModel("head_loss", "Head Loss (m)", String.format("%.4f", headLossFactor)),
                             GenericResultModel("friction_factor", "Friction Factor", pipeMaterial.value),
                             GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
@@ -80,6 +80,8 @@ class PlainFieldLateralSelectionDesignViewModel @Inject constructor(
                         } else {
                             resultList.add(GenericResultModel("INFO", "", "Your selected Lateral size is good. The calculated Head Loss is sufficient to carry the flow. Go To Next"))
                         }
+
+                        resultList.add(GenericResultModel("ACTION", "", ""))
 
                         preferences.setLateralDiameter(lateralDiameter.label)
                         preferences.setLateralLength(action.data.lateralLengthSubMain)

@@ -17,6 +17,7 @@ import com.farmingapp.databinding.BottomsheetOptionsBinding
 import com.farmingapp.databinding.BottomsheetResultBinding
 import com.farmingapp.databinding.FragmentSystemWaterSourceDetailsBinding
 import com.farmingapp.model.*
+import com.farmingapp.view.helper.OnNextListener
 import com.farmingapp.view.helper.OnOptionsClickListener
 import com.farmingapp.view.helper.OptionsAdapter
 import com.farmingapp.view.helper.ResultAdapter
@@ -113,20 +114,20 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
         val resultBottomSheetBinding = BottomsheetResultBinding.inflate(layoutInflater, null, false)
         bottomSheetResultDialog.setContentView(resultBottomSheetBinding.root)
 
-        resultAdapter = ResultAdapter(resultList)
+        resultAdapter = ResultAdapter(resultList, object : OnNextListener {
+            override fun next() {
+                if (bottomSheetResultDialog.isShowing) {
+                    bottomSheetResultDialog.setCancelable(true)
+                    bottomSheetResultDialog.dismiss()
+                    enableViews()
+                }
+
+                val action = SystemWaterSourceDetailsFragmentDirections.actionSystemWaterSourceDetailsFragmentToOutputDetailsFragment()
+                findNavController().navigate(action)
+            }
+        })
         resultBottomSheetBinding.rvResult.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         resultBottomSheetBinding.rvResult.adapter = resultAdapter
-
-        resultBottomSheetBinding.btnNext.setOnClickListener {
-            if (bottomSheetResultDialog.isShowing) {
-                bottomSheetResultDialog.setCancelable(true)
-                bottomSheetResultDialog.dismiss()
-                enableViews()
-            }
-
-            val action = SystemWaterSourceDetailsFragmentDirections.actionSystemWaterSourceDetailsFragmentToOutputDetailsFragment()
-            findNavController().navigate(action)
-        }
 
         if (bottomSheetResultDialog.isShowing.not()) {
             bottomSheetResultDialog.show()
