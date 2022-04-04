@@ -59,14 +59,11 @@ class TerraceDetailsFragment : Fragment() {
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -87,7 +84,6 @@ class TerraceDetailsFragment : Fragment() {
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = TerraceDetailsFragmentDirections.actionTerraceDetailsFragmentToTerraceFieldLateralDetailsFragment()
@@ -165,7 +161,6 @@ class TerraceDetailsFragment : Fragment() {
 
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     UserAction.Submit(
                         TerraceDetailUserModel(
@@ -186,7 +181,6 @@ class TerraceDetailsFragment : Fragment() {
     }
 
     private fun resetViews() {
-        enableViews()
         lengthString.clear()
         widthString.clear()
         heightString.clear()
@@ -202,36 +196,6 @@ class TerraceDetailsFragment : Fragment() {
         binding.tvTerraceLengths.text = ""
         binding.tvTerraceWidths.text = ""
         binding.tvTerraceCumulativeHeights.text = ""
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etTotalTerraceLength.isEnabled = false
-        binding.etTotalTerraceWidth.isEnabled = false
-        binding.etTotalTerraceCumulativeHeight.isEnabled = false
-        binding.etEachTerraceLength.isEnabled = false
-        binding.etEachTerraceWidth.isEnabled = false
-        binding.etEachTerraceCumulativeHeight.isEnabled = false
-        binding.tvTerraceLengths.isEnabled = false
-        binding.tvTerraceWidths.isEnabled = false
-        binding.tvTerraceCumulativeHeights.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etTotalTerraceLength.isEnabled = true
-        binding.etTotalTerraceWidth.isEnabled = true
-        binding.etTotalTerraceCumulativeHeight.isEnabled = true
-        binding.etEachTerraceLength.isEnabled = true
-        binding.etEachTerraceWidth.isEnabled = true
-        binding.etEachTerraceCumulativeHeight.isEnabled = true
-        binding.tvTerraceLengths.isEnabled = true
-        binding.tvTerraceWidths.isEnabled = true
-        binding.tvTerraceCumulativeHeights.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {

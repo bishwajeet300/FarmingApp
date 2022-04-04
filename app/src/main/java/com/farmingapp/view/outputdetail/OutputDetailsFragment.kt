@@ -74,6 +74,21 @@ class OutputDetailsFragment : Fragment() {
         binding.etNumberOfDripperForSubMain.setText(data.numberOfDripperForSubMain)
         binding.etSelectedSubMainDiameter.setText(data.subMainDiameter)
         binding.etLengthOfSubMain.setText(data.subMainLength)
+
+        binding.etCropName.isEnabled = false
+        binding.etSoilType.isEnabled = false
+        binding.etPlantToPlantDistance.isEnabled = false
+        binding.etRowToRowDistance.isEnabled = false
+        binding.etSelectedDripperSize.isEnabled = false
+        binding.etDripperPerPlant.isEnabled = false
+        binding.etSelectedLateralDiameter.isEnabled = false
+        binding.etLengthOfLateral.isEnabled = false
+        binding.etMainlineDiameter.isEnabled = false
+        binding.etMainlineLength.isEnabled = false
+        binding.etNumberOfLateralOnSubMain.isEnabled = false
+        binding.etNumberOfDripperForSubMain.isEnabled = false
+        binding.etSelectedSubMainDiameter.isEnabled = false
+        binding.etLengthOfSubMain.isEnabled = false
     }
 
     private fun setupClickListener() {

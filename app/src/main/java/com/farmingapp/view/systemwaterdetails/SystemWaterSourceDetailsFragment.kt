@@ -57,14 +57,11 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -119,7 +116,6 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = SystemWaterSourceDetailsFragmentDirections.actionSystemWaterSourceDetailsFragmentToOutputDetailsFragment()
@@ -137,7 +133,6 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     SystemWaterSourceDetailsAction.Submit
                 )
@@ -176,25 +171,8 @@ class SystemWaterSourceDetailsFragment : Fragment(), OnOptionsClickListener {
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etWaterSource.setText("")
         binding.etWaterTankLocation.setText("")
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etWaterSource.isEnabled = false
-        binding.etWaterTankLocation.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etWaterSource.isEnabled = true
-        binding.etWaterTankLocation.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {

@@ -55,14 +55,11 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListe
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -100,7 +97,6 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListe
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = PlainFieldSubMainSelectionDesignFragmentDirections.actionPlainFieldSubMainSelectionDesignFragmentToMainLineSelectionDesignFragment()
@@ -118,7 +114,6 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListe
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     PlainFieldSubMainSelectionDesignAction.Submit(
                         PlainFieldSubMainSelectionDesignUserModel(
@@ -154,25 +149,8 @@ class PlainFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListe
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etSubMainDiameter.setText("")
         binding.etLengthSubMain.setText("")
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etSubMainDiameter.isEnabled = false
-        binding.etLengthSubMain.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etSubMainDiameter.isEnabled = true
-        binding.etLengthSubMain.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {

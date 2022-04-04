@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 @AndroidEntryPoint
 class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickListener {
@@ -38,7 +39,7 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
     private lateinit var subMainDiameterAdapter: OptionsAdapter
     private lateinit var resultAdapter: ResultAdapter
 
-    private val subMainLengthString: StringBuffer = StringBuffer()
+    private val subMainLengthString: StringBuilder = StringBuilder()
     private var eachSubMainLength: MutableList<Double> = mutableListOf()
 
     override fun onCreateView(
@@ -59,14 +60,11 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -104,7 +102,6 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = TerraceFieldSubMainSelectionDesignFragmentDirections.actionTerraceFieldSubMainSelectionDesignFragmentToMainLineSelectionDesignFragment()
@@ -143,7 +140,6 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
 
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     TerraceFieldSubMainSelectionDesignAction.Submit(
                         TerraceFieldSubMainSelectionDesignUserModel(
@@ -179,29 +175,12 @@ class TerraceFieldSubMainSelectionDesignFragment : Fragment(), OnOptionsClickLis
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etSubMainDiameter.setText("")
         binding.etEachSubMainTerraceLength.setText("")
         binding.etTotalSubMainLength.setText("")
         binding.tvSubMainTerraceLengths.text = ""
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.btnAddSubMainTerraceLength.isEnabled = false
-        binding.etSubMainDiameter.isEnabled = false
-        binding.etEachSubMainTerraceLength.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.btnAddSubMainTerraceLength.isEnabled = true
-        binding.etSubMainDiameter.isEnabled = true
-        binding.etEachSubMainTerraceLength.isEnabled = true
+        subMainLengthString.clear()
+        eachSubMainLength.clear()
     }
 
     private fun isFormValidated(): Boolean {

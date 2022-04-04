@@ -60,14 +60,11 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList, value.isTerraceField)
                         }
                     }
@@ -139,7 +136,6 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
                 if (isTerraceField) {
                     val action = CropSelectionWaterCalculationFragmentDirections.actionCropSelectionWaterCalculationFragmentToTerraceDetailsFragment()
@@ -161,7 +157,6 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     CropSelectionWaterCalculationAction.Submit(
                         CropSelectionWaterCalculationUserModel(
@@ -214,7 +209,6 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etCropName.setText("")
         binding.etSoilType.setText("")
         binding.etEPan.setText("")
@@ -222,32 +216,6 @@ class CropSelectionWaterCalculationFragment : Fragment(), OnOptionsClickListener
         binding.etPlantToPlantDistance.setText("")
         binding.etRowToRowDistance.setText("")
         binding.etWettedArea.setText("")
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etCropName.isEnabled = false
-        binding.etSoilType.isEnabled = false
-        binding.etEPan.isEnabled = false
-        binding.etPlantShadowArea.isEnabled = false
-        binding.etPlantToPlantDistance.isEnabled = false
-        binding.etRowToRowDistance.isEnabled = false
-        binding.etWettedArea.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etCropName.isEnabled = true
-        binding.etSoilType.isEnabled = true
-        binding.etEPan.isEnabled = true
-        binding.etPlantShadowArea.isEnabled = true
-        binding.etPlantToPlantDistance.isEnabled = true
-        binding.etRowToRowDistance.isEnabled = true
-        binding.etWettedArea.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {

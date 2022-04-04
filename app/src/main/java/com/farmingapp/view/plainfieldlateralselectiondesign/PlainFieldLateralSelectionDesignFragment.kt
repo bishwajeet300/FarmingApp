@@ -57,14 +57,11 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -119,7 +116,6 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = PlainFieldLateralSelectionDesignFragmentDirections.actionPlainFieldLateralSelectionDesignFragmentToPlainFieldSubMainSelectionDesignFragment()
@@ -137,7 +133,6 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     PlainFieldLateralSelectionDesignAction.Submit(
                         PlainFieldLateralSelectionDesignUserModel(
@@ -180,28 +175,9 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etLateralDiameter.setText("")
         binding.etPipeMaterial.setText("")
         binding.etLateralLengthSubMain.setText("")
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etLateralDiameter.isEnabled = false
-        binding.etPipeMaterial.isEnabled = false
-        binding.etLateralLengthSubMain.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etLateralDiameter.isEnabled = true
-        binding.etPipeMaterial.isEnabled = true
-        binding.etLateralLengthSubMain.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {
@@ -239,8 +215,7 @@ class PlainFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListe
     private fun getLateralDiameter(): List<GenericOptionModel> {
         return listOf(
             GenericOptionModel(key = "12", label = "12 mm"),
-            GenericOptionModel(key = "16", label = "16 mm"),
-            GenericOptionModel(key = "20", label = "20 mm")
+            GenericOptionModel(key = "16", label = "16 mm")
         )
     }
 

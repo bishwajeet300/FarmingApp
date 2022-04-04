@@ -58,18 +58,14 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                     withContext(Dispatchers.IO) {
                         try {
                             val totalDripperList = action.data.lateralLengthPerTerrace.map {
-                                (it * action.data.lateralPerTerrace.toInt()).div(
-                                    preferences.getDripperSpacing().toDouble()
-                                )
+                                (it.div(preferences.getDripperSpacing().toDouble()))
                             }
                             val flowRateList = totalDripperList.map {
                                 (it * preferences.getDripperInternalDiameter().toDouble()).div(3600)
                             }
                             val base = 10.0
-                            val factor = (1.21 * base.pow(10)) / (pipeMaterial.value.toDouble()
-                                .pow(1.852)).times(
-                                preferences.getLateralSpacing().toDouble().pow(-4.871)
-                            ).times(0.35)
+                            var factor = (1.21 * base.pow(10)) / (pipeMaterial.value.toDouble().pow(1.852))
+                            factor *= preferences.getLateralSpacing().toDouble().pow(-4.871) * 0.35
 
                             val headLossList =
                                 flowRateList.zip(action.data.lateralLengthPerTerrace) { x3, x1 ->
@@ -99,7 +95,7 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                                 GenericResultModel(
                                     "head_loss",
                                     "Head Loss (m)",
-                                    "${headLossList.sum()}"
+                                    String.format("%.4f", headLossList.sum())
                                 ),
                                 GenericResultModel(
                                     "friction_factor",
@@ -109,7 +105,7 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                                 GenericResultModel(
                                     "total_dripper",
                                     "Total Drippers",
-                                    "${totalDripperList.sum().times(3)}"
+                                    String.format("%.2f", totalDripperList.sum().times(3))
                                 ),
                                 GenericResultModel(
                                     "outlet_factor",
@@ -135,12 +131,12 @@ class TerraceFieldLateralSelectionDesignViewModel @Inject constructor(
                             preferences.setRateOfLateral(lateralDiameter.rateOfLateral)
                             preferences.setRateOfEndCapsLateral(lateralDiameter.rateOfEndCapsLateral)
 
-                            val widthList =
-                                TransformationUtil().transformStringToList(preferences.getTerraceWidths())
+                            val pressureList =
+                                TransformationUtil().transformStringToList(preferences.getPressurePerLateral())
 
                             var messageWarningFlag = false
-                            headLossList.forEachIndexed { index, value ->
-                                if (widthList[index] > value) {
+                            headLossList.forEachIndexed { index, headLoss ->
+                                if (headLoss > pressureList[index]) {
                                     messageWarningFlag = true
                                 }
                             }

@@ -48,7 +48,7 @@ class TerraceDetailsViewModel @Inject constructor(
                             GenericResultModel("ACTION", "", "")
                         )
                         preferences.setArea("${areaList.sum()}")
-                        preferences.setTerraceWidths(TransformationUtil().transformListToString(action.data.eachTerraceWidth))
+                        preferences.setPressurePerLateral(TransformationUtil().transformListToString(pressureList))
 
                         _resultSavedStatus.value = ResultSavedStatusModel.Saved(resultList)
                     }

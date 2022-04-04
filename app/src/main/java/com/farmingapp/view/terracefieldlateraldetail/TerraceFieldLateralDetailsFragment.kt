@@ -55,14 +55,11 @@ class TerraceFieldLateralDetailsFragment : Fragment(), OnOptionsClickListener {
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -100,7 +97,6 @@ class TerraceFieldLateralDetailsFragment : Fragment(), OnOptionsClickListener {
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = TerraceFieldLateralDetailsFragmentDirections.actionTerraceFieldLateralDetailsFragmentToTerraceFieldLateralSelectionDesignFragment()
@@ -155,31 +151,10 @@ class TerraceFieldLateralDetailsFragment : Fragment(), OnOptionsClickListener {
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etDripper.setText("")
         binding.etDripperPerPlant.setText("")
         binding.etDripperSpacing.setText("")
         binding.etLateralSpacing.setText("")
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etDripper.isEnabled = false
-        binding.etDripperPerPlant.isEnabled = false
-        binding.etDripperSpacing.isEnabled = false
-        binding.etLateralSpacing.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etDripper.isEnabled = true
-        binding.etDripperPerPlant.isEnabled = true
-        binding.etDripperSpacing.isEnabled = true
-        binding.etLateralSpacing.isEnabled = true
     }
 
     private fun isFormValidated(): Boolean {

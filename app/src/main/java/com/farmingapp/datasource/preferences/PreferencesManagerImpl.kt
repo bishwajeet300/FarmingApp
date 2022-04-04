@@ -60,12 +60,12 @@ class PreferencesManagerImpl @Inject constructor(
         setValue(LATERAL_SPACING, lateralSpacing)
     }
 
-    override fun getTerraceWidths(): String {
-        return getValue(TERRACE_WIDTH)
+    override fun getPressurePerLateral(): String {
+        return getValue(PRESSURE_PER_LATERAL)
     }
 
-    override fun setTerraceWidths(widths: String) {
-        setValue(TERRACE_WIDTH, widths)
+    override fun setPressurePerLateral(pressurePerLateral: String) {
+        setValue(PRESSURE_PER_LATERAL, pressurePerLateral)
     }
 
     override fun getNumberOfLateral(): String {
@@ -371,7 +371,7 @@ class PreferencesManagerImpl @Inject constructor(
         private const val DRIPPER_INTERNAL_DIAMETER = "d_i_d"
         private const val DRIPPER_SPACING = "dripper_spacing"
         private const val LATERAL_SPACING = "lateral_spacing"
-        private const val TERRACE_WIDTH = "terrace_width"
+        private const val PRESSURE_PER_LATERAL = "pressure_per_lateral"
         private const val NUMBER_OF_LATERAL = "n_o_l"
         private const val LATERAL_FLOW_RATE = "flow_rate_lateral"
         private const val FRICTION_FACTOR = "friction_factor"

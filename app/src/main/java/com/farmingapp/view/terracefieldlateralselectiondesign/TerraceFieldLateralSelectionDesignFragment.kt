@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 @AndroidEntryPoint
 class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickListener {
@@ -40,7 +41,7 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
     private lateinit var pipeMaterialAdapter: OptionsAdapter
     private lateinit var resultAdapter: ResultAdapter
 
-    private val lateralLengthString: StringBuffer = StringBuffer()
+    private val lateralLengthString: StringBuilder = StringBuilder()
     private var eachLateralLength: MutableList<Double> = mutableListOf()
 
     override fun onCreateView(
@@ -61,14 +62,11 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            disableViews()
                             setupResultBottomSheet(value.resultList)
                         }
                     }
@@ -123,7 +121,6 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
                 if (bottomSheetResultDialog.isShowing) {
                     bottomSheetResultDialog.setCancelable(true)
                     bottomSheetResultDialog.dismiss()
-                    enableViews()
                 }
 
                 val action = TerraceFieldLateralSelectionDesignFragmentDirections.actionTerraceFieldLateralSelectionDesignFragmentToTerraceFieldSubMainSelectionDesignFragment()
@@ -161,7 +158,6 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
 
         binding.btnSubmit.setOnClickListener {
             if (isFormValidated()) {
-                disableViews()
                 viewModel.receiveUserAction(
                     TerraceFieldLateralSelectionDesignAction.Submit(
                         TerraceFieldLateralSelectionDesignUserModel(
@@ -205,34 +201,13 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etEachLateralTerraceLength.setText("")
         binding.etLateralDiameter.setText("")
         binding.etPipeMaterial.setText("")
         binding.etLateralTerraceNumber.setText("")
         binding.tvLateralTerraceLengths.text = ""
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.btnAddLateralTerraceLength.isEnabled = false
-        binding.etEachLateralTerraceLength.isEnabled = false
-        binding.etLateralDiameter.isEnabled = false
-        binding.etPipeMaterial.isEnabled = false
-        binding.etLateralTerraceNumber.isEnabled = false
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.btnAddLateralTerraceLength.isEnabled = true
-        binding.etEachLateralTerraceLength.isEnabled = true
-        binding.etLateralDiameter.isEnabled = true
-        binding.etPipeMaterial.isEnabled = true
-        binding.etLateralTerraceNumber.isEnabled = true
+        eachLateralLength.clear()
+        lateralLengthString.clear()
     }
 
     private fun isFormValidated(): Boolean {
@@ -278,7 +253,6 @@ class TerraceFieldLateralSelectionDesignFragment : Fragment(), OnOptionsClickLis
         return listOf(
             GenericOptionModel(key = "12", label = "12 mm"),
             GenericOptionModel(key = "16", label = "16 mm"),
-            GenericOptionModel(key = "20", label = "20 mm")
         )
     }
 

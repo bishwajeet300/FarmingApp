@@ -165,14 +165,10 @@ class CostDetailsFragment : Fragment(), OnEditClickListener {
     }
 
     private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
         binding.btnSubmit.isEnabled = true
     }
 
     private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
         binding.btnSubmit.isEnabled = true
     
     }

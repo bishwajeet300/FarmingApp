@@ -47,14 +47,11 @@ class FarmerDetailFragment: Fragment() {
                 viewModel.resultSavedStatus.collect { value ->
                     when (value) {
                         is ResultSavedStatusModel.Failure -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.something_went_wrong), Snackbar.LENGTH_SHORT).show()
                         }
                         ResultSavedStatusModel.Pending -> {
-                            enableViews()
                         }
                         is ResultSavedStatusModel.Saved -> {
-                            enableViews()
                             Snackbar.make(binding.divider, resources.getString(R.string.user_saved), Snackbar.LENGTH_SHORT).show()
                             val action =
                                 FarmerDetailFragmentDirections.actionFarmerDetailFragmentToCropSelectionWaterCalculationFragment()
@@ -70,7 +67,6 @@ class FarmerDetailFragment: Fragment() {
 
     private fun setupClickListener() {
         binding.btnSubmit.setOnClickListener {
-            disableViews()
             viewModel.receiveUserAction(
                 UserAction.Submit(
                     FarmerDetailUserModel(
@@ -94,31 +90,10 @@ class FarmerDetailFragment: Fragment() {
     }
 
     private fun resetViews() {
-        enableViews()
         binding.etFullName.setText("")
         binding.etPhone.setText("")
         binding.etEmail.setText("")
         binding.etAddress.setText("")
-    }
-
-    private fun enableViews() {
-        binding.btnBack.isEnabled = true
-        binding.btnReset.isEnabled = true
-        binding.btnSubmit.isEnabled = true
-        binding.etFullName.isEnabled = true
-        binding.etPhone.isEnabled = true
-        binding.etEmail.isEnabled = true
-        binding.etAddress.isEnabled = true
-    }
-
-    private fun disableViews() {
-        binding.btnBack.isEnabled = false
-        binding.btnReset.isEnabled = false
-        binding.btnSubmit.isEnabled = true
-        binding.etFullName.isEnabled = false
-        binding.etPhone.isEnabled = false
-        binding.etEmail.isEnabled = false
-        binding.etAddress.isEnabled = false
     }
 
     override fun onDestroyView() {

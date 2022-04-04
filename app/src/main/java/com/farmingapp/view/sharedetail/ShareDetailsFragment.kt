@@ -59,7 +59,11 @@ class ShareDetailsFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataFetchStatus.collect { value ->
                     when (value) {
                         is DataFetchStatusModel.Failure -> {
@@ -112,7 +116,7 @@ class ShareDetailsFragment : Fragment() {
     }
 
     private fun composeEmail(addresses: Array<String>, emailText: String) {
-        val intent = Intent(Intent.ACTION_SEND).apply {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
             type = "message/rfc822"
             data = Uri.parse("mailto:") // only email apps should handle this
             putExtra(Intent.EXTRA_EMAIL, addresses)

@@ -16,8 +16,8 @@ interface PreferencesManager {
     fun getLateralSpacing(): String
     fun setLateralSpacing(lateralSpacing: String)
 
-    fun getTerraceWidths(): String
-    fun setTerraceWidths(widths: String)
+    fun getPressurePerLateral(): String
+    fun setPressurePerLateral(pressurePerLateral: String)
 
     fun getNumberOfLateral(): String
     fun setNumberOfLateral(numberOfLateral: String)

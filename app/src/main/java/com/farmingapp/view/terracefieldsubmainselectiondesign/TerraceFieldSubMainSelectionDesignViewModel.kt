@@ -31,6 +31,7 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
     val resultSavedStatus: StateFlow<ResultSavedStatusModel> = _resultSavedStatus
 
     private lateinit var subMainDiameter: SubMainDiameter
+    private val endingPredicate = arrayOf("0")
 
     companion object {
         val subMainDiameterList = listOf(
@@ -66,7 +67,7 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                                 GenericResultModel("outlet_factor", "Outlet Factor", "Taken as 0.35"),
                                 GenericResultModel("total_plants", "Total No. of Plants", "${preferences.getTotalNumberOfDrippers().toInt()/preferences.getDripperPerPlant().toInt()}"),
                                 GenericResultModel("total_drippers", "Total No. of Drippers", preferences.getTotalNumberOfDrippers()),
-                                GenericResultModel("avg_flowrate_sub_main", "Avg Flowrate of Sub-Main", String.format("%.7f", flowRateList.sum())),
+                                GenericResultModel("avg_flowrate_sub_main", "Avg Flowrate of Sub-Main", String.format("%.7f", flowRateList.sum()).trimEnd { it == '0' }),
                                 GenericResultModel("sub_main_diameter", "Selected Sub-Main Diameter (mm)", subMainDiameter.subMainDiameter)
                             )
 
@@ -85,7 +86,7 @@ class TerraceFieldSubMainSelectionDesignViewModel @Inject constructor(
                             preferences.setQuantityOfEndCapsSubMain("$subMainLengthCount")
                             preferences.setQuantityOfEndCapsLateral("${subMainLengthCount.times(3)}")
 
-                            val widthList = TransformationUtil().transformStringToList(preferences.getTerraceWidths())
+                            val widthList = TransformationUtil().transformStringToList(preferences.getPressurePerLateral())
 
                             var messageWarningFlag = false
                             headLossList.forEachIndexed { index, value -> if (widthList[index] > value) { messageWarningFlag = true }}
