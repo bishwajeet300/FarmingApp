@@ -16,8 +16,8 @@ android {
         applicationId "com.farmingapp"
         minSdk 27
         targetSdk 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,8 +31,8 @@ android {
             minifyEnabled false
             firebaseAppDistribution {
                 artifactType="APK"
-                releaseNotes="Bug Fixes. Delete/Uninstall the previos app before installing this."
-                testers="gtpatle77@gmail.com, tsheringsangmosherpa@gmail.com, mail2bishwajeet.k@gmail.com"
+                releaseNotes="Bug Fixes"
+                testersFile="./testers.txt"
             }
         }
     }
